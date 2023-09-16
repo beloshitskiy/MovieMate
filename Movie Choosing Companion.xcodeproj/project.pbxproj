@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A74D014D2AB5CE09005E3204 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A74D014C2AB5CE09005E3204 /* SnapKit */; };
+		A74D01502AB5CE4E005E3204 /* HandlersKit in Frameworks */ = {isa = PBXBuildFile; productRef = A74D014F2AB5CE4E005E3204 /* HandlersKit */; };
 		A751A6DF2AAF180700720430 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751A6DE2AAF180700720430 /* AppDelegate.swift */; };
 		A751A6E12AAF180700720430 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751A6E02AAF180700720430 /* SceneDelegate.swift */; };
 		A751A6E32AAF180700720430 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751A6E22AAF180700720430 /* ViewController.swift */; };
@@ -29,6 +31,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A74D01502AB5CE4E005E3204 /* HandlersKit in Frameworks */,
+				A74D014D2AB5CE09005E3204 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +84,10 @@
 			dependencies = (
 			);
 			name = "Movie Choosing Companion";
+			packageProductDependencies = (
+				A74D014C2AB5CE09005E3204 /* SnapKit */,
+				A74D014F2AB5CE4E005E3204 /* HandlersKit */,
+			);
 			productName = "Movie Choosing Companion";
 			productReference = A751A6DB2AAF180700720430 /* Movie Choosing Companion.app */;
 			productType = "com.apple.product-type.application";
@@ -108,6 +116,10 @@
 				Base,
 			);
 			mainGroup = A751A6D22AAF180700720430;
+			packageReferences = (
+				A74D014B2AB5CE09005E3204 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A74D014E2AB5CE4E005E3204 /* XCRemoteSwiftPackageReference "HandlersKit" */,
+			);
 			productRefGroup = A751A6DC2AAF180700720430 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -350,6 +362,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A74D014B2AB5CE09005E3204 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		A74D014E2AB5CE4E005E3204 /* XCRemoteSwiftPackageReference "HandlersKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hhru/HandlersKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A74D014C2AB5CE09005E3204 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A74D014B2AB5CE09005E3204 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		A74D014F2AB5CE4E005E3204 /* HandlersKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A74D014E2AB5CE4E005E3204 /* XCRemoteSwiftPackageReference "HandlersKit" */;
+			productName = HandlersKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A751A6D32AAF180700720430 /* Project object */;
 }
