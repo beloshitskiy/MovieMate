@@ -1,2 +1,2 @@
-# movie-choosing-companion
+# MovieMate
 iOS app for choosing the movie for a night
