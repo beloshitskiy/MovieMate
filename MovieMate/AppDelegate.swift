@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Movie Choosing Companion
+//  MovieMate
 //
 //  Created by denis.beloshitsky on 11.09.2023.
 //

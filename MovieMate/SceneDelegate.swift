@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  Movie Choosing Companion
+//  MovieMate
 //
 //  Created by denis.beloshitsky on 11.09.2023.
 //
@@ -13,7 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = ViewController()
+        window.rootViewController = LobbyPageViewController()
         window.makeKeyAndVisible()
         self.window = window
     }
