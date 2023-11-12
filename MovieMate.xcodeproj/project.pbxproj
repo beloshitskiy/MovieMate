@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A74D014D2AB5CE09005E3204 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A74D014C2AB5CE09005E3204 /* SnapKit */; };
-		A74D01502AB5CE4E005E3204 /* HandlersKit in Frameworks */ = {isa = PBXBuildFile; productRef = A74D014F2AB5CE4E005E3204 /* HandlersKit */; };
+		82BEEE6EEDBC0E4AFA925922 /* Pods_MovieMate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13D38608E3389F3E93F4C776 /* Pods_MovieMate.framework */; };
 		A751A6DF2AAF180700720430 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751A6DE2AAF180700720430 /* AppDelegate.swift */; };
 		A751A6E12AAF180700720430 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751A6E02AAF180700720430 /* SceneDelegate.swift */; };
 		A751A6E82AAF180900720430 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A751A6E72AAF180900720430 /* Assets.xcassets */; };
 		A751A6EB2AAF180900720430 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A751A6E92AAF180900720430 /* LaunchScreen.storyboard */; };
-		A755D0BE2AF036E800DA0332 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A755D0BD2AF036E800DA0332 /* Alamofire */; };
 		A755D0C02AF0378F00DA0332 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755D0BF2AF0378F00DA0332 /* Movie.swift */; };
 		A755D0C32AF03A1600DA0332 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755D0C22AF03A1600DA0332 /* Genre.swift */; };
 		A755D0C52AF03C7F00DA0332 /* LobbyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755D0C42AF03C7F00DA0332 /* LobbyPageViewController.swift */; };
@@ -28,9 +26,13 @@
 		A755D0DC2AF03E5700DA0332 /* GenrePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755D0DB2AF03E5700DA0332 /* GenrePageView.swift */; };
 		A755D0DE2AF03EBC00DA0332 /* DeckPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755D0DD2AF03EBC00DA0332 /* DeckPageView.swift */; };
 		A755D0E02AF03EDF00DA0332 /* LobbyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755D0DF2AF03EDF00DA0332 /* LobbyPageView.swift */; };
+		A79E48B52AF041A200EBA35A /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79E48B42AF041A200EBA35A /* ApiClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		13D38608E3389F3E93F4C776 /* Pods_MovieMate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieMate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		32AA75143E013B155E2FC189 /* Pods-MovieMate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieMate.release.xcconfig"; path = "Target Support Files/Pods-MovieMate/Pods-MovieMate.release.xcconfig"; sourceTree = "<group>"; };
+		4B34835ABC929291A6025E24 /* Pods-MovieMate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieMate.debug.xcconfig"; path = "Target Support Files/Pods-MovieMate/Pods-MovieMate.debug.xcconfig"; sourceTree = "<group>"; };
 		A751A6DB2AAF180700720430 /* MovieMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A751A6DE2AAF180700720430 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A751A6E02AAF180700720430 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 		A755D0DB2AF03E5700DA0332 /* GenrePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenrePageView.swift; sourceTree = "<group>"; };
 		A755D0DD2AF03EBC00DA0332 /* DeckPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckPageView.swift; sourceTree = "<group>"; };
 		A755D0DF2AF03EDF00DA0332 /* LobbyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LobbyPageView.swift; sourceTree = "<group>"; };
+		A79E48B42AF041A200EBA35A /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,20 +61,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A755D0BE2AF036E800DA0332 /* Alamofire in Frameworks */,
-				A74D01502AB5CE4E005E3204 /* HandlersKit in Frameworks */,
-				A74D014D2AB5CE09005E3204 /* SnapKit in Frameworks */,
+				82BEEE6EEDBC0E4AFA925922 /* Pods_MovieMate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		12A1FA2C8169DEEC6FDAEC98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				13D38608E3389F3E93F4C776 /* Pods_MovieMate.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1304457B2E6E8816DC7383C8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4B34835ABC929291A6025E24 /* Pods-MovieMate.debug.xcconfig */,
+				32AA75143E013B155E2FC189 /* Pods-MovieMate.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		A751A6D22AAF180700720430 = {
 			isa = PBXGroup;
 			children = (
 				A751A6DD2AAF180700720430 /* MovieMate */,
 				A751A6DC2AAF180700720430 /* Products */,
+				1304457B2E6E8816DC7383C8 /* Pods */,
+				12A1FA2C8169DEEC6FDAEC98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,6 +113,7 @@
 				A755D0CD2AF03D3F00DA0332 /* DeckPage */,
 				A755D0C82AF03CE000DA0332 /* LobbyPage */,
 				A755D0C12AF039C900DA0332 /* Model */,
+				A79E48B62AF041A900EBA35A /* Networking */,
 			);
 			path = MovieMate;
 			sourceTree = "<group>";
@@ -157,6 +179,14 @@
 			name = App;
 			sourceTree = "<group>";
 		};
+		A79E48B62AF041A900EBA35A /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				A79E48B42AF041A200EBA35A /* ApiClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -164,20 +194,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A751A6EF2AAF180900720430 /* Build configuration list for PBXNativeTarget "MovieMate" */;
 			buildPhases = (
+				D157F65E831C45C5494202C8 /* [CP] Check Pods Manifest.lock */,
 				A751A6D72AAF180700720430 /* Sources */,
 				A751A6D82AAF180700720430 /* Frameworks */,
 				A751A6D92AAF180700720430 /* Resources */,
+				03C5369436BEF80028C3B7C3 /* [CP] Embed Pods Frameworks */,
+				9A5273083F8D6F17E6F0F381 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = MovieMate;
-			packageProductDependencies = (
-				A74D014C2AB5CE09005E3204 /* SnapKit */,
-				A74D014F2AB5CE4E005E3204 /* HandlersKit */,
-				A755D0BD2AF036E800DA0332 /* Alamofire */,
-			);
 			productName = "Movie Choosing Companion";
 			productReference = A751A6DB2AAF180700720430 /* MovieMate.app */;
 			productType = "com.apple.product-type.application";
@@ -206,11 +234,6 @@
 				Base,
 			);
 			mainGroup = A751A6D22AAF180700720430;
-			packageReferences = (
-				A74D014B2AB5CE09005E3204 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				A74D014E2AB5CE4E005E3204 /* XCRemoteSwiftPackageReference "HandlersKit" */,
-				A755D0BC2AF036E800DA0332 /* XCRemoteSwiftPackageReference "Alamofire" */,
-			);
 			productRefGroup = A751A6DC2AAF180700720430 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -232,6 +255,65 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		03C5369436BEF80028C3B7C3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MovieMate/Pods-MovieMate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MovieMate/Pods-MovieMate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MovieMate/Pods-MovieMate-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9A5273083F8D6F17E6F0F381 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MovieMate/Pods-MovieMate-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MovieMate/Pods-MovieMate-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MovieMate/Pods-MovieMate-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D157F65E831C45C5494202C8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MovieMate-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A751A6D72AAF180700720430 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -241,6 +323,7 @@
 				A755D0CC2AF03D2200DA0332 /* DeckPageViewModel.swift in Sources */,
 				A755D0DC2AF03E5700DA0332 /* GenrePageView.swift in Sources */,
 				A755D0D12AF03D6200DA0332 /* GenrePageViewModel.swift in Sources */,
+				A79E48B52AF041A200EBA35A /* ApiClient.swift in Sources */,
 				A751A6DF2AAF180700720430 /* AppDelegate.swift in Sources */,
 				A755D0CA2AF03D0F00DA0332 /* DeckPageViewController.swift in Sources */,
 				A755D0C02AF0378F00DA0332 /* Movie.swift in Sources */,
@@ -388,6 +471,7 @@
 		};
 		A751A6F02AAF180900720430 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B34835ABC929291A6025E24 /* Pods-MovieMate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -418,6 +502,7 @@
 		};
 		A751A6F12AAF180900720430 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 32AA75143E013B155E2FC189 /* Pods-MovieMate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -468,51 +553,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		A74D014B2AB5CE09005E3204 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
-		A74D014E2AB5CE4E005E3204 /* XCRemoteSwiftPackageReference "HandlersKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hhru/HandlersKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		A755D0BC2AF036E800DA0332 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.8.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A74D014C2AB5CE09005E3204 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A74D014B2AB5CE09005E3204 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		A74D014F2AB5CE4E005E3204 /* HandlersKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A74D014E2AB5CE4E005E3204 /* XCRemoteSwiftPackageReference "HandlersKit" */;
-			productName = HandlersKit;
-		};
-		A755D0BD2AF036E800DA0332 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A755D0BC2AF036E800DA0332 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A751A6D32AAF180700720430 /* Project object */;
 }

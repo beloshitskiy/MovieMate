@@ -1,0 +1,11 @@
+framework module OKTracer {
+  umbrella header "OKTracer-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module OKTracer.Swift {
+  header "OKTracer-Swift.h"
+  requires objc
+}

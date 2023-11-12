@@ -1,0 +1,6 @@
+framework module HandlersKit {
+  umbrella header "HandlersKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

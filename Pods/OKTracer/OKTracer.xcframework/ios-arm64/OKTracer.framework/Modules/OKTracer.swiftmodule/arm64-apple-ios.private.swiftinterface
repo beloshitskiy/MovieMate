@@ -1,0 +1,460 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)
+// swift-module-flags: -target arm64-apple-ios12.4 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OKTracer
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import CommonCrypto
+import Foundation
+@_exported import OKTracer
+import Security
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import os
+import zlib
+public struct Configuration {
+  public init(token: Swift.String, features: [OKTracer.FeatureConfiguration], sysInfoProvider: (any OKTracer.TracerSystemInfoProviderProtocol)? = nil, logProvider: (any OKTracer.TracerLogProviderProtocol)? = nil, logDestinations: any Swift.Sequence<OKTracer.TracerLogDestination> = [.file()])
+}
+@frozen public enum CrashExampleType {
+  case outOfBounds
+  case forceUnwrap
+  case fatal
+  case objcTerminate
+  public static func == (a: OKTracer.CrashExampleType, b: OKTracer.CrashExampleType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol CrashReporterModelProtocol {
+  var versionCode: Swift.Int? { get }
+  var versionName: Swift.String? { get }
+  var processName: Swift.String? { get }
+  var text: Swift.String { get }
+  var uuid: Swift.String { get }
+  var timestamp: Foundation.Date? { get }
+  var startTime: Foundation.Date? { get }
+}
+@frozen public enum DataCodingError : Swift.Error {
+  case unsupportedCodingType(decodeType: Swift.String, supportedType: Swift.String)
+  case typeMismatch(expectedType: Swift.String, decodeType: Swift.String)
+}
+extension OKTracer.DataCodingError : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public protocol DataDecoder {
+  func decode<T>(_ type: T.Type, from data: Foundation.Data) throws -> T
+}
+public protocol DataEncoder {
+  func encode<T>(object: T) throws -> Foundation.Data
+}
+public protocol DataStorage {
+  func set(object value: Any?, forKey key: Swift.String)
+  func object(forKey key: Swift.String) -> Any?
+  func data(forKey key: Swift.String) -> Foundation.Data?
+  func removeObject(forKey key: Swift.String)
+}
+public struct DiskUsageConfiguration : Swift.Codable, Swift.Hashable {
+  public let systemExcluded: [Foundation.FileManager.SearchPathDirectory]
+  public let excluded: [Swift.String]
+  public let notifyIfEquals: Swift.Bool
+  public let maxDepth: Swift.Int
+  public let maxEntries: Swift.Int
+  public let isRecursive: Swift.Bool
+  public let observeMode: OKTracer.DiskUsageObserveMode
+  public let autoStart: Swift.Bool
+  public let difference: Swift.Int
+  public init(autoStart: Swift.Bool? = nil, systemExcluded: [Foundation.FileManager.SearchPathDirectory]? = nil, excluded: [Swift.String]? = nil, notifyIfEquals: Swift.Bool? = nil, maxDepth: Swift.Int? = nil, maxEntries: Swift.Int? = nil, difference: Swift.Int? = nil, isRecursive: Swift.Bool? = nil, observeMode: OKTracer.DiskUsageObserveMode? = nil)
+  public init(from decoder: any Swift.Decoder) throws
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: OKTracer.DiskUsageConfiguration, b: OKTracer.DiskUsageConfiguration) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Foundation.FileManager.SearchPathDirectory : Swift.Codable {
+}
+@frozen public enum DiskUsageObject : Swift.Hashable, Swift.Codable {
+  case directory(path: Foundation.FileManager.SearchPathDirectory, tag: Swift.String)
+  case folder(path: Swift.String, tag: Swift.String)
+  case file(path: Swift.String, tag: Swift.String)
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: OKTracer.DiskUsageObject, b: OKTracer.DiskUsageObject) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension OKTracer.DiskUsageObject : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@frozen public enum DiskUsageObserveMode : Swift.Hashable, Swift.Codable {
+  case timer(interval: Foundation.TimeInterval)
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: OKTracer.DiskUsageObserveMode, b: OKTracer.DiskUsageObserveMode) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+}
+@frozen public enum FeatureConfiguration : Swift.Hashable {
+  case crashReporter(shouldUseHack: Swift.Bool = false, maxUploadsCount: Swift.Int = 3, useTrackSession: Swift.Bool = true)
+  case assertReporter(sendEvery: Swift.Int = .zero, maxUploadsCount: Swift.Int = 10)
+  case diskUsage(probability: Swift.Int = 10000)
+  case systrace(probability: Swift.Int = 10000)
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: OKTracer.FeatureConfiguration, b: OKTracer.FeatureConfiguration) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@frozen public enum FeatureObject {
+  case diskUsage(objects: [OKTracer.DiskUsageObject], configuration: OKTracer.DiskUsageConfiguration = DiskUsageConfiguration())
+  case systrace(scenarios: [OKTracer.SysTraceScenario], configuration: OKTracer.SysTraceConfiguration = SysTraceConfiguration())
+}
+@frozen public enum FeatureType : Swift.String, Swift.Codable, Swift.Hashable, Swift.CaseIterable {
+  case assertReporter
+  case crashReporter
+  case diskUsage
+  case systrace
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [OKTracer.FeatureType]
+  public typealias RawValue = Swift.String
+  public static var allCases: [OKTracer.FeatureType] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension Foundation.JSONDecoder : OKTracer.DataDecoder {
+  public func decode<T>(_ type: T.Type, from data: Foundation.Data) throws -> T
+}
+extension Foundation.JSONEncoder : OKTracer.DataEncoder {
+  public func encode<T>(object: T) throws -> Foundation.Data
+}
+@frozen public enum NetworkingError : Swift.Error {
+  case unknown
+  case unacceptableStatusCode(acceptableStatusCodes: [Swift.Int], responseStatusCode: Swift.Int, failingURL: Foundation.URL?)
+  case emptyResponse
+}
+public protocol Networking {
+  func data(for url: Foundation.URL, completion: @escaping (Foundation.Data?, Foundation.URLResponse?, (any Swift.Error)?) -> Swift.Void)
+  func data(for request: Foundation.URLRequest, completion: @escaping (Foundation.Data?, Foundation.URLResponse?, (any Swift.Error)?) -> Swift.Void)
+  func object<T>(for request: Foundation.URLRequest, decoder: any OKTracer.DataDecoder, completion: @escaping (_ data: Foundation.Data?, _ result: Swift.Result<T, any Swift.Error>) -> Swift.Void)
+}
+extension OKTracer.Networking {
+  public func codableObject<T>(for request: Foundation.URLRequest, completion: @escaping (_ data: Foundation.Data?, _ result: Swift.Result<T, any Swift.Error>) -> Swift.Void) where T : Swift.Decodable
+}
+final public class SSLCompositeEvaluator : OKTracer.SSLTrustEvaluating {
+  public init(evaluators: [any OKTracer.SSLTrustEvaluating])
+  final public func canEvaluate(_ trust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+  final public func canEvaluate(forHost host: Swift.String) -> Swift.Bool
+  final public func evaluate(_ trust: Security.SecTrust, forHost host: Swift.String) throws
+  @objc deinit
+}
+@frozen public enum SSLEvaluateError : Swift.Error {
+  case noCertificatesFound
+  case noPublicKeysFound(host: Swift.String, trust: Security.SecTrust)
+  case policyApplicationFailed(trust: Security.SecTrust, policy: Security.SecPolicy, status: Darwin.OSStatus)
+  case settingAnchorCertificatesFailed(status: Darwin.OSStatus, certificates: [Security.SecCertificate])
+  case trustEvaluationFailed(error: (any Swift.Error)?)
+  case hostValidationFailed(host: Swift.String, trust: Security.SecTrust, status: Darwin.OSStatus, result: Security.SecTrustResultType)
+  case certificatePinningFailed(host: Swift.String, trust: Security.SecTrust, pinnedCertificates: [Security.SecCertificate], serverCertificates: [Security.SecCertificate])
+  case publicKeyPinningFailed(host: Swift.String, trust: Security.SecTrust, pinnedKeys: [Swift.String], serverKeys: [Swift.String])
+  case customEvaluationFailed(error: any Swift.Error)
+}
+final public class SSLPinnedCertificatesEvaluator {
+  public init(certificates: [Security.SecCertificate] = [])
+  @objc deinit
+}
+extension OKTracer.SSLPinnedCertificatesEvaluator : OKTracer.SSLTrustEvaluating {
+  final public func canEvaluate(_ trust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+  final public func canEvaluate(forHost host: Swift.String) -> Swift.Bool
+  final public func evaluate(_ trust: Security.SecTrust, forHost host: Swift.String) throws
+}
+public struct SSLPinningConfig : Swift.Codable {
+  public var domains: [OKTracer.SSLPinningDomain]
+  public func hasDomain(_ domain: Swift.String) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct SSLPinningDomain : Swift.Codable {
+  public var domain: Swift.String
+  public var hashes: [Swift.String]
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension OKTracer.SSLPinningConfig {
+  public init(hosts: Swift.Set<Swift.String>, pins: Swift.Set<Swift.String>, remouteConfig: OKTracer.SSLPinningRemoteConfig? = nil)
+}
+public struct SSLPinningRemoteConfig : Swift.Codable {
+  public var domains: [Swift.String]
+  public var pins: [OKTracer.SSLRemotePin]
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct SSLRemotePin : Swift.Codable {
+  public var id: Swift.Int
+  public var pin: Swift.String
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+final public class SSLPinningRemoteService {
+  public typealias Completion = (OKTracer.SSLPinningRemoteService.LoadResult) -> Swift.Void
+  @frozen public enum ServiceError : Swift.Error {
+    case unknown
+    case createURLFailure(url: Foundation.URL)
+  }
+  @frozen public enum Source {
+    case cache
+    case remoute
+    public static func == (a: OKTracer.SSLPinningRemoteService.Source, b: OKTracer.SSLPinningRemoteService.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  @frozen public enum LoadResult {
+    case noData
+    case success(_: OKTracer.SSLPinningRemoteConfig, _: OKTracer.SSLPinningRemoteService.Source)
+    case failure(_: any Swift.Error)
+  }
+  final public var lastUpdateTime: Foundation.Date? {
+    get
+    set
+  }
+  public init(baseURL: Foundation.URL, appID: Swift.String, updateInterval: Foundation.TimeInterval, storage: any OKTracer.DataStorage, networking: any OKTracer.Networking = URLSession.shared)
+  final public func loadData(source: OKTracer.SSLPinningRemoteService.Source = .remoute, completion: @escaping OKTracer.SSLPinningRemoteService.Completion)
+  @objc deinit
+}
+@frozen public enum SSLPublicKeyCacheError : Swift.Error {
+  case unsupportedPublicKeyAlgorithm
+  case publicKeyNotFound
+  case publicKeyDataCorrupted(error: (any Swift.Error)?)
+}
+final public class SSLPublicKeyCache {
+  public init()
+  @objc deinit
+}
+final public class SSLPublicKeysEvaluator {
+  final public var configuration: OKTracer.SSLPinningConfig? {
+    get
+    set
+  }
+  public init()
+  @objc deinit
+}
+extension OKTracer.SSLPublicKeysEvaluator : OKTracer.SSLTrustEvaluating {
+  final public func canEvaluate(_ trust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+  final public func canEvaluate(forHost host: Swift.String) -> Swift.Bool
+  final public func evaluate(_ trust: Security.SecTrust, forHost host: Swift.String) throws
+}
+public protocol SSLTrustEvaluating {
+  func canEvaluate(_ trust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+  func canEvaluate(forHost host: Swift.String) -> Swift.Bool
+  func evaluate(_ trust: Security.SecTrust, forHost host: Swift.String) throws
+}
+public struct SysTraceConfiguration : Swift.Codable, Swift.Hashable {
+  public let duration: Foundation.TimeInterval
+  public let autoStart: Swift.Bool
+  public init(autoStart: Swift.Bool? = nil, duration: Foundation.TimeInterval? = nil)
+  public init(from decoder: any Swift.Decoder) throws
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: OKTracer.SysTraceConfiguration, b: OKTracer.SysTraceConfiguration) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public typealias SysTraceScenario = Swift.String
+public enum TracerFactory {
+  public static func tracerService(configuration: OKTracer.Configuration, items: [OKTracer.FeatureObject] = [], delegate: (any OKTracer.TracerServiceDelegate)? = nil) -> any OKTracer.TracerServiceProtocol
+  public static func tracerServiceForCrashReporting(token: Swift.String, delegate: (any OKTracer.TracerServiceDelegate)? = nil, sysInfoProvider: (any OKTracer.TracerSystemInfoProviderProtocol)? = nil, logProvider: (any OKTracer.TracerLogProviderProtocol)? = nil) -> any OKTracer.TracerServiceProtocol
+  public static func tracerService(token: Swift.String, features: [OKTracer.FeatureConfiguration], items: [OKTracer.FeatureObject] = [], delegate: (any OKTracer.TracerServiceDelegate)? = nil, sysInfoProvider: (any OKTracer.TracerSystemInfoProviderProtocol)? = nil, logProvider: (any OKTracer.TracerLogProviderProtocol)? = nil) -> any OKTracer.TracerServiceProtocol
+  public static func raise(crash: OKTracer.CrashExampleType)
+}
+@frozen public enum TracerLastSessionState {
+  case normal(count: Swift.Int)
+  case crashed(count: Swift.Int, result: Swift.Result<any OKTracer.CrashReporterModelProtocol, any Swift.Error>)
+}
+@frozen public enum TracerLogDestination {
+  public enum Constants {
+    public static let defaultFormat: Swift.String
+  }
+  case console(format: Swift.String = Constants.defaultFormat, minLevel: OKTracer.TracerLogLevel = .debug)
+  case file(format: Swift.String = Constants.defaultFormat, minLevel: OKTracer.TracerLogLevel = .warning)
+  case oslog(format: Swift.String = Constants.defaultFormat, minLevel: OKTracer.TracerLogLevel = .debug)
+  case buildin(format: Swift.String = Constants.defaultFormat, minLevel: OKTracer.TracerLogLevel = .debug)
+}
+extension OKTracer.TracerLogDestination : Swift.Equatable {
+  public static func == (lhs: OKTracer.TracerLogDestination, rhs: OKTracer.TracerLogDestination) -> Swift.Bool
+}
+extension OKTracer.TracerLogDestination : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol TracerLoggerProtocol {
+  func log<T>(level: OKTracer.TracerLogLevel, message: @autoclosure () -> T)
+  func logAsync<T>(level: OKTracer.TracerLogLevel, message: @autoclosure () -> T)
+  func log<T>(level: OKTracer.TracerLogLevel, message: @autoclosure () -> T, file: Swift.String?, function: Swift.String?, line: Swift.Int?, context: Any?)
+  func logAsync<T>(level: OKTracer.TracerLogLevel, message: @autoclosure () -> T, file: Swift.String?, function: Swift.String?, line: Swift.Int?, context: Any?)
+}
+extension OKTracer.TracerLoggerProtocol {
+  public func debug<T>(message: @autoclosure () -> T, file: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line, context: Any? = nil)
+  public func error<T>(message: @autoclosure () -> T, file: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line, context: Any? = nil)
+  public func info<T>(message: @autoclosure () -> T, file: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line, context: Any? = nil)
+  public func warning<T>(message: @autoclosure () -> T, file: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line, context: Any? = nil)
+  public func critical<T>(message: @autoclosure () -> T, file: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line, context: Any? = nil)
+}
+@frozen public enum TracerLogLevel : Swift.String, Swift.CaseIterable {
+  case critical
+  case error
+  case warning
+  case info
+  case debug
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [OKTracer.TracerLogLevel]
+  public typealias RawValue = Swift.String
+  public static var allCases: [OKTracer.TracerLogLevel] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension OKTracer.TracerLogLevel : Swift.Comparable {
+  public static func < (lhs: OKTracer.TracerLogLevel, rhs: OKTracer.TracerLogLevel) -> Swift.Bool
+}
+public protocol TracerLogProviderProtocol {
+  func getData() -> Foundation.Data?
+}
+public struct TracerNonFatalModel {
+  public init(message: Swift.String, traceType: OKTracer.TraceType = .current(), tags: [Swift.String : Swift.String] = [:], properties: [Swift.String : Swift.String] = [:], fileName: Swift.String? = nil, function: Swift.String? = nil, line: Swift.Int? = nil)
+}
+public protocol TracerServiceDelegate : AnyObject {
+  func tracerDidRegister(result: Swift.Result<OKTracer.FeatureType, any Swift.Error>)
+  func tracerDidStart(result: Swift.Result<OKTracer.FeatureType, any Swift.Error>)
+  func tracerDidStop(result: Swift.Result<OKTracer.FeatureType, any Swift.Error>)
+  func tracerDidEvent(feature: OKTracer.FeatureType, result: Swift.Result<Swift.String, any Swift.Error>)
+  func tracerDidRegisterObject(result: Swift.Result<OKTracer.FeatureObject, any Swift.Error>)
+  func tracerDidStartObject(result: Swift.Result<OKTracer.FeatureObject, any Swift.Error>)
+  func tracerDidStopObject(result: Swift.Result<OKTracer.FeatureObject, any Swift.Error>)
+  func tracerDidRemoveObject(result: Swift.Result<OKTracer.FeatureObject, any Swift.Error>)
+  func tracerDidUpload(feature: OKTracer.FeatureType, result: Swift.Result<Swift.String, any Swift.Error>)
+  func tracerDidAllUpload(feature: OKTracer.FeatureType)
+}
+public protocol TracerServiceProtocol : AnyObject {
+  var delegate: (any OKTracer.TracerServiceDelegate)? { get set }
+  var logger: any OKTracer.TracerLoggerProtocol { get }
+  func start()
+  func start(features: [OKTracer.FeatureType])
+  func stop()
+  func stop(features: [OKTracer.FeatureType])
+  func lastSessionState() -> OKTracer.TracerLastSessionState
+  func update(properties: [Swift.String : Swift.String])
+  func update(tags: [Swift.String : Swift.String])
+  func send(nonFatal: OKTracer.TracerNonFatalModel)
+}
+extension OKTracer.TracerServiceProtocol {
+  public func send(_ nonFatal: OKTracer.TracerNonFatalModel, fileName: Swift.StaticString = #file, function: Swift.StaticString = #function, line: Swift.Int = #line)
+}
+extension OKTracer.TracerServiceProtocol {
+  public func start(diskUsageObject: OKTracer.DiskUsageObject)
+  public func stop(diskUsageObject: OKTracer.DiskUsageObject)
+}
+extension OKTracer.TracerServiceProtocol {
+  public func beginSysTrace(scenario: OKTracer.SysTraceScenario, section: Swift.String, function: Swift.StaticString = #function, line: Swift.Int = #line)
+  public func endSysTrace(scenario: OKTracer.SysTraceScenario, section: Swift.String, function: Swift.StaticString = #function, line: Swift.Int = #line)
+  public func beginSysTraceObjC(scenario: OKTracer.SysTraceScenario, section: Swift.String, function: Swift.String = #function, line: Swift.Int = #line)
+  public func endSysTraceObjC(scenario: OKTracer.SysTraceScenario, section: Swift.String, function: Swift.String = #function, line: Swift.Int = #line)
+  public func startSysTrace(scenario: OKTracer.SysTraceScenario)
+  public func stopSysTrace(scenario: OKTracer.SysTraceScenario)
+}
+public enum TracerSwiftDemangler {
+  public static func demangle(string: Swift.String, isSimplified: Swift.Bool) -> Swift.String
+}
+public protocol TracerSystemInfoProtocol {
+  var model: Swift.String { get }
+  var orientation: Swift.String { get }
+  var freeRAM: Swift.Double { get }
+  var diskFree: Swift.Int { get }
+  var osType: Swift.String { get }
+  var osVersion: Swift.String { get }
+  var appVersion: Swift.String { get }
+  var appVersionCode: Swift.Int { get }
+  var deviceId: Swift.String { get }
+  var inBackground: Swift.Bool { get }
+  var properties: [Swift.String : Swift.String] { get }
+  var vendor: Swift.String { get }
+  var tags: [Swift.String : Swift.String] { get }
+  var isRooted: Swift.Bool? { get }
+  var processName: Swift.String? { get }
+}
+public protocol TracerSystemInfoProviderProtocol {
+  func info() -> any OKTracer.TracerSystemInfoProtocol
+  func set(properties: [Swift.String : Swift.String])
+  func set(tags: [Swift.String : Swift.String])
+}
+public typealias TracerURLProxyCompletion = (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void
+public protocol TracerURLProxyProtocol : AnyObject {
+  func modifyRequest(_ request: Foundation.URLRequest) -> Foundation.URLRequest
+  func canHandle(forHost host: Swift.String) -> Swift.Bool
+  func handle(_ challenge: Foundation.URLAuthenticationChallenge, completion: @escaping OKTracer.TracerURLProxyCompletion) -> Swift.Bool
+}
+@frozen public enum TracerURLProxyType {
+  case `default`
+  public static func == (a: OKTracer.TracerURLProxyType, b: OKTracer.TracerURLProxyType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@frozen public enum TraceType {
+  case custom(callStackAddresses: [Foundation.NSNumber], callStackSymbols: [Swift.String] = [], dropFirstSymbols: Swift.Int = .zero)
+  case current(dropFirstSymbols: Swift.Int = .zero)
+}
+@frozen public enum UploadConfiguration {
+  case `default`
+  public static func == (a: OKTracer.UploadConfiguration, b: OKTracer.UploadConfiguration) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Foundation.URLSession : OKTracer.Networking {
+  public func data(for url: Foundation.URL, completion: @escaping (Foundation.Data?, Foundation.URLResponse?, (any Swift.Error)?) -> Swift.Void)
+  public func data(for request: Foundation.URLRequest, completion: @escaping (Foundation.Data?, Foundation.URLResponse?, (any Swift.Error)?) -> Swift.Void)
+  public func object<T>(for request: Foundation.URLRequest, decoder: any OKTracer.DataDecoder, completion: @escaping (_ data: Foundation.Data?, Swift.Result<T, any Swift.Error>) -> Swift.Void)
+}
+extension OKTracer.CrashExampleType : Swift.Equatable {}
+extension OKTracer.CrashExampleType : Swift.Hashable {}
+extension OKTracer.CrashExampleType : Swift.Sendable {}
+extension OKTracer.DiskUsageObject : Swift.Sendable {}
+extension OKTracer.DiskUsageObserveMode : Swift.Sendable {}
+extension OKTracer.FeatureConfiguration : Swift.Sendable {}
+extension OKTracer.FeatureType : Swift.RawRepresentable {}
+extension OKTracer.FeatureType : Swift.Sendable {}
+extension OKTracer.SSLPinningRemoteService.Source : Swift.Equatable {}
+extension OKTracer.SSLPinningRemoteService.Source : Swift.Hashable {}
+extension OKTracer.SSLPinningRemoteService.Source : Swift.Sendable {}
+extension OKTracer.TracerLogDestination : Swift.Sendable {}
+extension OKTracer.TracerLogLevel : Swift.Hashable {}
+extension OKTracer.TracerLogLevel : Swift.RawRepresentable {}
+extension OKTracer.TracerLogLevel : Swift.Sendable {}
+extension OKTracer.TracerURLProxyType : Swift.Equatable {}
+extension OKTracer.TracerURLProxyType : Swift.Hashable {}
+extension OKTracer.TracerURLProxyType : Swift.Sendable {}
+extension OKTracer.TraceType : Swift.Sendable {}
+extension OKTracer.UploadConfiguration : Swift.Equatable {}
+extension OKTracer.UploadConfiguration : Swift.Hashable {}
+extension OKTracer.UploadConfiguration : Swift.Sendable {}
