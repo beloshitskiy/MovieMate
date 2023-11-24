@@ -46,7 +46,14 @@ extension Movie: Decodable {
         description = try container.decode(String.self, forKey: .description)
         posterURL = URL(string: try container.decode(String.self, forKey: .posterURL))
         releaseYear = try container.decode(Int.self, forKey: .releaseYear)
-        duration = try container.decode(String.self, forKey: .duration)
+
+        let durationInMinutes = try container.decode(TimeInterval.self, forKey: .duration) * 60
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.zeroFormattingBehavior = .dropAll
+        formatter.allowedUnits = [.hour, .minute]
+        duration = formatter.string(from: durationInMinutes) ?? ""
+
         genres = try container.decode([Genre].self, forKey: .genres)
         ratings = try container.decode([Rating].self, forKey: .ratings)
     }
