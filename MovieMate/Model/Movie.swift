@@ -7,14 +7,24 @@
 
 import Foundation
 
+struct Rating: Decodable {
+    let provider: String
+    let rating: String
+}
+
+struct Genre: Hashable, Decodable {
+    let name: String
+}
+
 struct Movie {
     let id: UUID // or str
     let name: String
     let description: String
     let posterURL: URL?
-    let rating: Double
     let releaseYear: Int
-    let duration: Int // а duration в чем меряем
+    let duration: String
+    let genres: [Genre]
+    let ratings: [Rating]
 }
 
 extension Movie: Decodable {
@@ -23,9 +33,10 @@ extension Movie: Decodable {
         case name
         case description
         case posterURL = "poster_url"
-        case rating = "rating_kp"
         case releaseYear = "release_year"
         case duration
+        case genres
+        case ratings
     }
 
     init(from decoder: Decoder) throws {
@@ -34,8 +45,9 @@ extension Movie: Decodable {
         name = try container.decode(String.self, forKey: .name)
         description = try container.decode(String.self, forKey: .description)
         posterURL = URL(string: try container.decode(String.self, forKey: .posterURL))
-        rating = try container.decode(Double.self, forKey: .rating)
         releaseYear = try container.decode(Int.self, forKey: .releaseYear)
-        duration = try container.decode(Int.self, forKey: .duration)
+        duration = try container.decode(String.self, forKey: .duration)
+        genres = try container.decode([Genre].self, forKey: .genres)
+        ratings = try container.decode([Rating].self, forKey: .ratings)
     }
 }

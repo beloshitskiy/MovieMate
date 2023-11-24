@@ -12,50 +12,61 @@ import UIKit
 final class LobbyPageView: UIView {
     private var viewModel: LobbyPageViewModel?
 
-    private let createLobbyButton = UIButton()
-    private let joinLobbyButton = UIButton()
+    private let headerLabel = UILabel()
+    private lazy var textField = UITextField()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
+    private let continueButton = UIButton()
 
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func configure(with viewModel: LobbyPageViewModel) {
+        guard self.viewModel == nil else { return }
+        self.viewModel = viewModel
+        configureLobby()
     }
 }
 
 private extension LobbyPageView {
     // MARK: - Setup UI
 
-    func setupUI() {
-        setupCreateLobbyButton()
-        setupJoinLobbyButton()
-
-        setupContraints()
+    func configureLobby() {
+        configureHierarchy()
+        configureUI()
     }
 
-    func setupContraints() {
-        
-    }
+    func configureHierarchy() {
+        guard let action = viewModel?.action else { return }
 
-    func setupCreateLobbyButton() {
-        createLobbyButton.onTap {
-            Router.shared.navigate(to: .createLobbyPage)
+        self.addSubviews([
+            headerLabel,
+            continueButton,
+        ])
+
+        if action == .join {
+            self.addSubview(textField)
         }
     }
 
-    func setupJoinLobbyButton() {
-        joinLobbyButton.onTap {
-            Router.shared.navigate(to: .joinLobbyPage)
+    func configureUI() {
+        guard let viewModel else { return }
+
+        headerLabel.text = viewModel.headerText
+        continueButton.setTitle(viewModel.continueButtonTitle, for: .normal)
+
+        continueButton.isEnabled = viewModel.canStart
+
+        if viewModel.action == .join {
+            textField.placeholder = viewModel.textFieldPlaceholder
+            continueButton.onTap { [weak self] in
+                guard let self else { return }
+                self.viewModel?.joinLobby(lobbyId: self.textField.text ?? "")
+            }
+        } else {
+            continueButton.onTap { [weak viewModel] in
+                viewModel?.createLobby()
+            }
         }
     }
-
 
     // MARK: - Layout config
 
-    enum LayoutConfig {
-
-    }
+    enum LayoutConfig {}
 }
