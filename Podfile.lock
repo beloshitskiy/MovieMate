@@ -1,29 +1,33 @@
 PODS:
   - Alamofire (5.8.1)
+  - AlamofireImage (4.3.0):
+    - Alamofire (~> 5.8)
+  - CombineCocoa (0.4.1)
   - HandlersKit (1.0.0)
-  - OKTracer (0.1.35)
   - SnapKit (5.6.0)
 
 DEPENDENCIES:
   - Alamofire
+  - AlamofireImage
+  - CombineCocoa
   - HandlersKit
-  - OKTracer
   - SnapKit
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Alamofire
+    - AlamofireImage
+    - CombineCocoa
     - HandlersKit
     - SnapKit
-  https://github.com/odnoklassniki/tracer-ios.git:
-    - OKTracer
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  AlamofireImage: 843953fa97bee5f561cf05d83abd759e590b068d
+  CombineCocoa: e5210dbfb480ff251078929459ac17e750e7af1d
   HandlersKit: 7702c1b098238baf06dd3384ced2c2114c4ebc81
-  OKTracer: fc59a4cac9f64d45c4711f39ccb243dc079e7064
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: ba4b7c57c279630d6d377d097eb0b920d09a6cae
+PODFILE CHECKSUM: 320fe0665570f087a473e1d93ad4894854830b13
 
 COCOAPODS: 1.12.1
