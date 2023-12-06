@@ -3,31 +3,47 @@ PODS:
   - AlamofireImage (4.3.0):
     - Alamofire (~> 5.8)
   - CombineCocoa (0.4.1)
+  - FLEX (5.22.10)
   - HandlersKit (1.0.0)
+  - Shuffle-iOS (0.5.0)
+  - SkeletonView (1.30.4)
   - SnapKit (5.6.0)
+  - YYText (1.0.7)
 
 DEPENDENCIES:
   - Alamofire
   - AlamofireImage
   - CombineCocoa
+  - FLEX
   - HandlersKit
+  - Shuffle-iOS
+  - SkeletonView
   - SnapKit
+  - YYText
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Alamofire
     - AlamofireImage
     - CombineCocoa
+    - FLEX
     - HandlersKit
+    - Shuffle-iOS
+    - SkeletonView
     - SnapKit
+    - YYText
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
   AlamofireImage: 843953fa97bee5f561cf05d83abd759e590b068d
   CombineCocoa: e5210dbfb480ff251078929459ac17e750e7af1d
+  FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
   HandlersKit: 7702c1b098238baf06dd3384ced2c2114c4ebc81
+  Shuffle-iOS: ff33658fb1e5eebd6a4724c156473e63754be9cb
+  SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 320fe0665570f087a473e1d93ad4894854830b13
+PODFILE CHECKSUM: 42ca2bd0176132823edff879d7d1f39b106580ed
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3
