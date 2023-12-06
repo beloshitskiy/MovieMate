@@ -14,6 +14,8 @@ final class WelcomePageView: UIView {
 
     private let createLobbyButton = UIButton()
     private let joinLobbyButton = UIButton()
+    private let imageView = UIImageView()
+    private let title = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,27 +37,95 @@ private extension WelcomePageView {
     // MARK: - Setup UI
 
     func setupUI() {
+        self.addSubviews([
+            imageView,
+            title,
+            createLobbyButton,
+            joinLobbyButton,
+        ])
+
         setupConstraints()
 
+        setupTitle()
         setupCreateLobbyButton()
         setupJoinLobbyButton()
+
+        imageView.image = UIImage(named: "welcome")
     }
 
-    func setupConstraints() {}
+    func setupConstraints() {
+        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+        title.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.58)
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+        }
+
+        createLobbyButton.snp.makeConstraints { make in
+            make.top.equalTo(title.snp.bottom).offset(20)
+            make.height.equalTo(50)
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+        }
+
+        joinLobbyButton.snp.makeConstraints { make in
+            make.top.equalTo(createLobbyButton.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+            make.height.equalTo(50)
+            make.bottom.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(10)
+        }
+    }
+
+    func setupTitle() {
+        title.text = "Добро\nпожаловать\nв MovieMate"
+        title.font = .systemFont(ofSize: 50, weight: .black)
+        title.textColor = .white
+        title.numberOfLines = 3
+        title.textAlignment = .left
+    }
 
     func setupCreateLobbyButton() {
-        createLobbyButton.onTap { [weak viewModel] in
-            viewModel?.moveToCreateLobbyPage()
+        var conf = UIButton.Configuration.filled()
+
+        conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            return outgoing
+        }
+
+        createLobbyButton.configuration = conf
+
+        createLobbyButton.tintColor = .white
+        createLobbyButton.setTitle("Создать лобби", for: .normal)
+        createLobbyButton.setTitleColor(.black, for: .normal)
+
+        createLobbyButton.onTap { [weak self] in
+            self?.viewModel?.moveToCreateLobbyPage()
         }
     }
 
     func setupJoinLobbyButton() {
-        joinLobbyButton.onTap { [weak viewModel] in
-            viewModel?.moveToJoinLobbyPage()
+        var conf = UIButton.Configuration.plain()
+
+        conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            return outgoing
+        }
+
+        joinLobbyButton.configuration = conf
+
+        joinLobbyButton.setTitle("Присоединиться к лобби", for: .normal)
+        joinLobbyButton.setTitleColor(.white, for: .normal)
+        joinLobbyButton.tintColor = .white
+
+        joinLobbyButton.onTap { [weak self] in
+            self?.viewModel?.moveToJoinLobbyPage()
         }
     }
 
     // MARK: - Layout config
 
-    enum LayoutConfig {}
+    enum LayoutConfig {
+        static let horizontalInset: CGFloat = 20.0
+    }
 }

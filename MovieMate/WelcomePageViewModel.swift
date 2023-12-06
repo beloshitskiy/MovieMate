@@ -7,20 +7,20 @@
 
 import UIKit
 
-final class WelcomePageViewModel {
+final class WelcomePageViewModel: ObservableObject {
     weak var vc: UIViewController?
 
     private let router = Router.shared
 
     func moveToCreateLobbyPage() {
-        guard let vc else { return }
+        guard let nvc = vc?.navigationController else { return }
         let lobbyVM = LobbyPageViewModel(action: .create)
-        router.navigate(from: vc, to: .createLobbyPage(lobbyVM))
+        router.navigate(in: nvc, to: .createLobbyPage(lobbyVM))
     }
 
     func moveToJoinLobbyPage() {
-        guard let vc else { return }
+        guard let nvc = vc?.navigationController else { return }
         let lobbyVM = LobbyPageViewModel(action: .join)
-        router.navigate(from: vc, to: .joinLobbyPage(lobbyVM))
+        router.navigate(in: nvc, to: .joinLobbyPage(lobbyVM))
     }
 }
