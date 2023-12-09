@@ -13,14 +13,12 @@ final class LobbyPageViewModel {
         case join
     }
 
-    // паблишер, который раз в n секунд обращается к серверу, получает ответ и обновляет значение
-    private(set) var canStart = false
-
     let action: LobbyAction
 
-    private(set) var headerText: String
+    let headerText: String
     let continueButtonTitle: String
-    let textFieldPlaceholder: String?
+    private(set) var roomID: String?
+    private(set) var textFieldPlaceholder: String?
 
     private let apiClient = ApiClient.shared
 
@@ -30,13 +28,17 @@ final class LobbyPageViewModel {
         switch action {
         case .create: 
             headerText = "Ваш Lobby ID"
+            roomID = "3QEY7O" // fetch
             continueButtonTitle = "Начать игру!"
-            textFieldPlaceholder = nil
         case .join:
             headerText = "Введите Lobby ID"
             continueButtonTitle = "Присоединиться"
             textFieldPlaceholder = "Ваш Lobby ID"
         }
+    }
+
+    func canContinue(_ str: String) -> Bool {
+        action == .create && AppState.currentState == .readyToStart || action == .join && !str.isEmpty
     }
 
     func createLobby() {
@@ -48,5 +50,9 @@ final class LobbyPageViewModel {
 
     func joinLobby(lobbyId: String) {
 //        try await apiClient.joinLobby(lobbyId: lobbyId)
+    }
+
+    func cancelRoomCreation() {
+        guard action == .create else { return }
     }
 }
