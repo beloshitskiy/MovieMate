@@ -26,6 +26,7 @@ final class LobbyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(lobbyView)
+        lobbyView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 
     override func viewWillAppear(_ animated: Bool) {
