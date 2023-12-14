@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class LobbyPageViewModel {
     enum LobbyAction {
@@ -13,46 +14,77 @@ final class LobbyPageViewModel {
         case join
     }
 
-    let action: LobbyAction
+    weak var vc: UIViewController?
 
+    let action: LobbyAction
     let headerText: String
     let continueButtonTitle: String
+
+    @Published
     private(set) var roomID: String?
     private(set) var textFieldPlaceholder: String?
-
-    private let apiClient = ApiClient.shared
 
     init(action: LobbyAction) {
         self.action = action
 
         switch action {
-        case .create: 
+        case .create:
             headerText = "Ваш Lobby ID"
-            roomID = "3QEY7O" // fetch
             continueButtonTitle = "Начать игру!"
         case .join:
             headerText = "Введите Lobby ID"
             continueButtonTitle = "Присоединиться"
             textFieldPlaceholder = "Ваш Lobby ID"
         }
+
+        createLobbyIfNeeded()
     }
 
-    func canContinue(_ str: String) -> Bool {
-        action == .create && AppState.currentState == .readyToStart || action == .join && !str.isEmpty
-    }
-
-    func createLobby() {
-        // либо делать attibuted string, либо еще один label
-
-//        let lobbyId = try await apiClient.createLobby()
-//        headerText.append(lobbyId)
+    func createLobbyIfNeeded() {
+        guard action == .create else { return }
+        Task {
+            do {
+                roomID = try await ApiClient.shared.createLobby().uppercased()
+            } catch {
+                await AlertController.showAlert(vc: vc, error: error)
+            }
+        }
     }
 
     func joinLobby(lobbyId: String) {
-//        try await apiClient.joinLobby(lobbyId: lobbyId)
+        guard action == .join else { return }
+        Task {
+            do {
+                try await ApiClient.shared.joinLobby(lobbyId: lobbyId)
+                // redirect to waiting room (???)
+            } catch {
+                await AlertController.showAlert(vc: vc, error: error)
+            }
+        }
     }
 
-    func cancelRoomCreation() {
+    @MainActor func cancelRoomCreation() {
         guard action == .create else { return }
+        Task {
+            try? await ApiClient.shared.deleteLobby()
+        }
+        Router.shared.navigateBack(in: vc?.navigationController)
+    }
+
+    func startLobby() {
+        guard action == .create else { return }
+        Task {
+            do {
+                if try await ApiClient.shared.startLobby() {
+                    await Router.shared.navigate(in: vc?.navigationController, to: .genresChoosingPage, makeRoot: true)
+                }
+            } catch {
+                await AlertController.showAlert(vc: vc, error: error)
+            }
+        }
+    }
+
+    func canContinue(_ str: String) -> Bool {
+        action == .create && ApiClient.shared.lobbyInfo?.appState == .readyToStart || action == .join && !str.isEmpty
     }
 }
