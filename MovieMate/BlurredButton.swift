@@ -11,12 +11,14 @@ import UIKit
 
 final class BlurredButton: UIView {
     var onTap: (() -> Void)?
-    var image: UIImage?
+    var image: UIImage? {
+        didSet {
+            button.setImage(image, for: .normal)
+        }
+    }
 
-    private let button = UIButton()
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-
-    // MARK: - Overrides
+    private let button = UIButton(configuration: .plain())
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,12 +34,8 @@ final class BlurredButton: UIView {
         super.layoutSubviews()
         self.roundCorners()
     }
-}
 
-private extension BlurredButton {
-    // MARK: - Setup UI
-
-    func setupUI() {
+    private func setupUI() {
         self.clipsToBounds = true
 
         self.addSubviews([
@@ -45,27 +43,9 @@ private extension BlurredButton {
             button,
         ])
 
-        setupConstraints()
+        button.tintColor = .white
 
-        setupButton()
-    }
-
-    func setupConstraints() {
         blurView.snp.makeConstraints { $0.edges.equalToSuperview() }
-        button.snp.makeConstraints { $0.edges.equalToSuperview().inset(LayoutConfig.buttonInset) }
-    }
-
-    func setupButton() {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = image
-        configuration.imagePlacement = .all
-
-        button.configuration = configuration
-    }
-
-    // MARK: - Layout config
-
-    enum LayoutConfig {
-        static let buttonInset: CGFloat = 5.0
+        button.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 }
