@@ -10,8 +10,8 @@ import HandlersKit
 import UIKit
 
 final class GenrePageView: UIView {
+    let tableView = UITableView()
     private let titleLabel = UILabel()
-    private let tableView = UITableView()
     private let randomGenreButton = UIButton()
     private let confirmButton = UIButton()
 
@@ -106,13 +106,14 @@ private extension GenrePageView {
         confirmButton.setTitleColor(.black, for: .normal)
 
         viewModel.$selectedPaths
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] arr in
                 self?.confirmButton.isEnabled = !arr.isEmpty
             }.store(in: &cancellables)
 
         confirmButton.onTap { [weak self] in
             guard let self else { return }
-            self.viewModel.confirmSelected(self.tableView)
+            self.viewModel.confirmUserChoice(self.tableView)
         }
     }
 
@@ -136,18 +137,20 @@ private extension GenrePageView {
         randomGenreButton.setTitleColor(.black, for: .normal)
 
         randomGenreButton.onTap { [weak self] in
-            guard let self else { return }
-            self.viewModel.chooseGenreRandomly()
+            self?.viewModel.chooseGenreRandomly()
         }
     }
 
     func setupTableView() {
-        tableView.register(cellWithClass: GenreCell.self)
-        tableView.dataSource = viewModel
-        tableView.delegate = viewModel
         tableView.rowHeight = 60
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelection = true
+
+        viewModel.$allGenres
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+            self?.tableView.reloadData()
+        }.store(in: &cancellables)
     }
 
     // MARK: - Layout config
