@@ -8,6 +8,7 @@
 import Combine
 import CombineCocoa
 import HandlersKit
+import SkeletonView
 import SnapKit
 import UIKit
 
@@ -140,6 +141,16 @@ private extension LobbyPageView {
 
         roomIDLabel.textColor = .white
         roomIDLabel.text = viewModel?.roomID
+        roomIDLabel.isSkeletonable = true
+        roomIDLabel.showAnimatedGradientSkeleton()
+
+        viewModel?.$roomID
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let label = self?.roomIDLabel else { return }
+                label.text = $0
+                label.hideSkeleton()
+            }.store(in: &cancellables)
     }
 
     func setupTextField() {
@@ -161,11 +172,13 @@ private extension LobbyPageView {
         textField.returnKeyType = .join
 
         textField.textPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] str in
                 self?.probablyRoomID = str ?? ""
             }.store(in: &cancellables)
 
         textField.returnPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.viewModel?.joinLobby(lobbyId: self.probablyRoomID)
@@ -190,6 +203,7 @@ private extension LobbyPageView {
         continueButton.setTitleColor(.black, for: .normal)
 
         $probablyRoomID
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] str in
                 guard let self else { return }
                 self.continueButton.isEnabled = self.viewModel?.canContinue(str) ?? false
@@ -200,7 +214,7 @@ private extension LobbyPageView {
             if vm.action == .join {
                 vm.joinLobby(lobbyId: self?.probablyRoomID ?? "")
             } else {
-                vm.createLobby()
+                vm.startLobby()
             }
         }
     }
