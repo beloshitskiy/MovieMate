@@ -10,55 +10,48 @@ import Foundation
 import UIKit
 
 final class GenrePageViewModel: NSObject {
-    private var genres: [Genre] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map { Genre(title: "\($0)") }
-    @Published private(set) var selectedPaths: [IndexPath] = []
+    weak var vc: UIViewController?
 
-//    override init() {
-//        super.init()
-//    }
+    @Published
+    private(set) var allGenres: [String] = []
+    @Published
+    var selectedPaths: [IndexPath] = []
+
+    override init() {
+        super.init()
+        loadGenres()
+    }
+
+    func loadGenres() {
+        Task {
+            do {
+                allGenres = (try? await ApiClient.shared.getGenres()) ?? []
+            }
+        }
+    }
 
     func chooseGenreRandomly() {
-        guard let random = genres.randomElement() else { return }
-        ApiClient.shared.confirmSelected([random])
+        guard let random = allGenres.randomElement() else { return }
+        confirmSelected([random])
     }
 
-    func confirmSelected(_ tableView: UITableView) {
-        let genres: [Genre] = selectedPaths.compactMap {
-            (tableView.cellForRow(at: $0) as? GenreCell)?.genre
+    func confirmUserChoice(_ tableView: UITableView) {
+        let genres: [String] = selectedPaths
+            .compactMap { (tableView.cellForRow(at: $0) as? GenreCell) }
+            .filter { $0.isChosen }
+            .map { $0.genre }
+        confirmSelected(genres)
+    }
+
+    private func confirmSelected(_ genres: [String]) {
+        Task {
+            do {
+                if try await ApiClient.shared.confirmSelected(genres) {
+                    await Router.shared.navigate(in: vc?.navigationController, to: .deckPage, makeRoot: true)
+                }
+            } catch {
+                await AlertController.showAlert(vc: vc, error: error)
+            }
         }
-
-        ApiClient.shared.confirmSelected(genres)
-    }
-}
-
-extension GenrePageViewModel: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard let cell = tableView.cellForRow(at: indexPath) as? GenreCell else { return }
-
-        if !cell.isChosen {
-            selectedPaths.append(indexPath)
-        } else {
-            selectedPaths.removeAll { $0 == indexPath }
-        }
-
-        cell.isChosen.toggle()
-    }
-}
-
-extension GenrePageViewModel: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        genres.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let genre = genres[safe: indexPath.row] else { return UITableViewCell() }
-        let cell = tableView.dequeueReusableCell(withClass: GenreCell.self, for: indexPath)
-        cell.configure(with: genre)
-        return cell
     }
 }
