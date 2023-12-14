@@ -8,31 +8,31 @@
 import UIKit
 
 final class MovieCardViewModel {
+    static var onLikeTap: (() -> Void)?
+    static var onDislikeTap: (() -> Void)?
+    static var onUndoTap: (() -> Void)?
+
     let title: String
     let description: String
-    let posterImage: UIImage?
-    let rating: Double
+    let posterURL: URL?
+    let rating: String
     let releaseYear: Int
     let duration: String
-    let genres: [Genre]
+    let genres: [String]
 
     let canUndo: Bool
     let undoImage: UIImage?
 
-    private let imageManager = ImageManager.shared
-
     init(with movie: Movie) {
         title = movie.name
         description = movie.description
-        posterImage = imageManager.loadImage(url: movie.posterURL) // ?? placeholder
+        posterURL = movie.posterURL
         rating = movie.rating
         releaseYear = movie.releaseYear
         duration = movie.duration
         genres = movie.genres
 
         undoImage = UIImage(systemName: "arrow.uturn.backward.circle")
-        canUndo = false
+        canUndo = true
     }
-
-
 }

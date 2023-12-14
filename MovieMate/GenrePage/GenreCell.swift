@@ -15,7 +15,7 @@ final class GenreCell: UITableViewCell {
         }
     }
 
-    var genre: Genre?
+    private(set) var genre = ""
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,15 +30,15 @@ final class GenreCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        genre = nil
+        genre = ""
         self.contentConfiguration = nil
         self.isChosen = false
     }
 
-    func configure(with genre: Genre) {
+    func configure(with genre: String) {
         self.genre = genre
         var content = self.defaultContentConfiguration()
-        content.text = genre.title
+        content.text = genre
         if #available(iOS 16.0, *) {
             content.textProperties.font = UIFont.systemFont(ofSize: 20, weight: .medium, width: .expanded)
         } else {
