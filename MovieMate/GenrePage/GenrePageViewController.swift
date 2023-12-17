@@ -30,6 +30,11 @@ final class GenrePageViewController: UIViewController {
         genreView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        genreView.spinner.startAnimating()
+    }
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

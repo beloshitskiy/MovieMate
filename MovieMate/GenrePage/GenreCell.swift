@@ -19,8 +19,9 @@ final class GenreCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .gray
-        self.tintColor = .orange
+        self.selectionStyle = .none
+        self.tintColor = .white
+        self.backgroundColor = .clear
     }
 
     @available(*, unavailable)
@@ -39,6 +40,7 @@ final class GenreCell: UITableViewCell {
         self.genre = genre
         var content = self.defaultContentConfiguration()
         content.text = genre
+        content.textProperties.color = .white
         if #available(iOS 16.0, *) {
             content.textProperties.font = UIFont.systemFont(ofSize: 20, weight: .medium, width: .expanded)
         } else {
