@@ -14,6 +14,8 @@ final class GenrePageView: UIView {
     private let titleLabel = UILabel()
     private let randomGenreButton = UIButton()
     private let confirmButton = UIButton()
+    private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
+    let spinner = UIActivityIndicatorView(style: .large)
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -34,13 +36,17 @@ final class GenrePageView: UIView {
 private extension GenrePageView {
     func setupUI() {
         self.addSubviews([
+            backgroundImage,
             titleLabel,
             tableView,
             randomGenreButton,
             confirmButton,
         ])
+        tableView.addSubview(spinner)
 
-        self.backgroundColor = .white
+        self.backgroundColor = .blue
+        spinner.hidesWhenStopped = true
+        spinner.color = .white
 
         setupConstraints()
 
@@ -51,6 +57,8 @@ private extension GenrePageView {
     }
 
     func setupConstraints() {
+        backgroundImage.snp.makeConstraints { $0.edges.equalToSuperview() }
+
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(self.safeAreaLayoutGuide).offset(20)
             make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
@@ -61,6 +69,8 @@ private extension GenrePageView {
             make.horizontalEdges.equalToSuperview().inset(5)
             make.bottom.equalTo(randomGenreButton.snp.top).offset(-20)
         }
+
+        spinner.snp.makeConstraints { $0.center.equalToSuperview() }
 
         randomGenreButton.snp.makeConstraints { make in
             make.height.equalTo(50)
@@ -82,7 +92,7 @@ private extension GenrePageView {
         } else {
             titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black)
         }
-        titleLabel.textColor = .black
+        titleLabel.textColor = .white
         titleLabel.textAlignment = .left
     }
 
@@ -145,12 +155,15 @@ private extension GenrePageView {
         tableView.rowHeight = 60
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelection = true
+        tableView.backgroundColor = .clear
 
         viewModel.$allGenres
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-            self?.tableView.reloadData()
-        }.store(in: &cancellables)
+                guard let self else { return }
+                self.spinner.stopAnimating()
+                self.tableView.reloadData()
+            }.store(in: &cancellables)
     }
 
     // MARK: - Layout config

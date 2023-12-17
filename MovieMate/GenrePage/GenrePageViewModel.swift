@@ -47,7 +47,9 @@ final class GenrePageViewModel: NSObject {
         Task {
             do {
                 if try await ApiClient.shared.confirmSelected(genres) {
-                    await Router.shared.navigate(in: vc?.navigationController, to: .deckPage, makeRoot: true)
+                    await Router.shared.navigate(in: vc?.navigationController,
+                                                 to: .waitingPage(.genresChoosing),
+                                                 makeRoot: true)
                 }
             } catch {
                 await AlertController.showAlert(vc: vc, error: error)
