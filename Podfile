@@ -1,4 +1,3 @@
-# source 'https://github.com/odnoklassniki/tracer-ios.git'
 source 'https://cdn.cocoapods.org/'
 
 platform :ios, '15.0'
@@ -7,7 +6,6 @@ target 'MovieMate' do
   use_frameworks!
 
   # Pods for MovieMate
-#  pod 'OKTracer'
   pod 'SnapKit'
   pod 'HandlersKit'
   pod 'Alamofire'
@@ -17,5 +15,6 @@ target 'MovieMate' do
   pod 'SkeletonView'
   pod 'Shuffle-iOS'
   pod 'YYText'
+  pod 'lottie-ios'
 
 end
