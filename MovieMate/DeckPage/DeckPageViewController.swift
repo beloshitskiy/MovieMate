@@ -23,9 +23,36 @@ final class DeckPageViewController: UIViewController {
         deckView.delegate = self
 
         dataSource.$movies
+            .receive(on: DispatchQueue.main)
+            .filter { !$0.isEmpty }
             .sink { [weak self] _ in
                 self?.deckView.reloadData()
             }.store(in: &cancellables)
+
+        ApiClient.shared.$lobbyInfo
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.handleStateChanged($0)
+            }.store(in: &cancellables)
+    }
+
+    private func handleStateChanged(_ info: LobbyInfo?) {
+        guard let info else { return }
+
+        switch info.appState {
+        case .finished:
+            Router.shared.navigate(in: self.navigationController,
+                                   to: .resultPage(info.matchedMovie != nil ? .good : .bad),
+                                   makeRoot: true)
+        case .choosingMoviesMatchError:
+            Router.shared.navigate(in: self.navigationController,
+                                   to: .resultPage(.bad),
+                                   makeRoot: true)
+        case .choosingMoviesTimeout:
+            Router.shared.navigate(in: self.navigationController, to: .welcomePage, makeRoot: true)
+        default:
+            break
+        }
     }
 
     @available(*, unavailable)
@@ -58,12 +85,8 @@ extension DeckPageViewController: SwipeCardStackDelegate {
     }
 
     func didSwipeAllCards(_ cardStack: SwipeCardStack) {
-        ApiClient.shared.$lobbyInfo
-            .receive(on: DispatchQueue.main)
-            .filter { $0?.appState == .finished }
-            .sink { info in
-                Router.shared.navigate(from: self, to: info?.matchedMovie != nil ? .goodResultPage : .badResultPage)
-                // remove subscription 🤔
-            }.store(in: &cancellables)
+        Task {
+            await ApiClient.shared.notifyEmpty()
+        }
     }
 }

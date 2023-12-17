@@ -25,12 +25,6 @@ final class MovieActionsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        dislikeButton.roundCorners()
-        likeButton.roundCorners()
-    }
 }
 
 private extension MovieActionsView {
@@ -44,7 +38,8 @@ private extension MovieActionsView {
         ])
         setupConstraints()
 
-        setupButtons()
+        setupLikeButton()
+        setupDislikeButton()
     }
 
     func setupConstraints() {
@@ -60,18 +55,51 @@ private extension MovieActionsView {
         }
     }
 
-    func setupButtons() {
-        likeButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        dislikeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+    func setupDislikeButton() {
+        var conf = UIButton.Configuration.filled()
 
-        likeButton.tintColor = .systemGreen
-        dislikeButton.tintColor = .systemRed
+        conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            if #available(iOS 16.0, *) {
+                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold, width: .expanded)
+            } else {
+                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            }
+            return outgoing
+        }
 
-        likeButton.onTap { [weak self] in self?.onLikeTap?() }
+        dislikeButton.configuration = conf
+
+        dislikeButton.tintColor = UIColor(hex: 0xC71927)
+        dislikeButton.setTitle("Не нравится", for: .normal)
+        dislikeButton.setTitleColor(.white, for: .normal)
+
         dislikeButton.onTap { [weak self] in self?.onDislikeTap?() }
     }
 
+    func setupLikeButton() {
+        var conf = UIButton.Configuration.filled()
+
+        conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            if #available(iOS 16.0, *) {
+                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold, width: .expanded)
+            } else {
+                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            }
+            return outgoing
+        }
+
+        likeButton.configuration = conf
+
+        likeButton.tintColor = UIColor(hex: 0x00C726)
+        likeButton.setTitle("Нравится", for: .normal)
+        likeButton.setTitleColor(.white, for: .normal)
+
+        likeButton.onTap { [weak self] in self?.onLikeTap?() }
+    }
+
     enum LayoutConfig {
-        static let buttonSize = CGSize(width: 100.0, height: 60.0)
+        static let buttonSize = CGSize(width: 160.0, height: 50.0)
     }
 }

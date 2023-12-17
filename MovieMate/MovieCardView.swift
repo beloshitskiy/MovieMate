@@ -17,10 +17,11 @@ final class MovieCardView: UIView {
         }
     }
 
-    private let undoButton = BlurredButton()
+    private let undoButton = UIButton()
 
-    private let posterImageView = UIImageView()
-    private let gradientView = GradientView()
+    private let posterBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+    private let backgroundPosterView = UIImageView()
+    private let mainPosterView = UIImageView()
 
     private let substrateView = UIView()
 
@@ -30,7 +31,7 @@ final class MovieCardView: UIView {
 
     private let actionsView = MovieActionsView()
 
-    private let moreAboutButton = UIButton()
+    private let descriptionButton = UIButton()
 
     // MARK: - Init
 
@@ -46,7 +47,7 @@ final class MovieCardView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        substrateView.roundCorners(radius: 25.0, corners: [.topLeft, .topRight])
+        mainPosterView.roundCorners(radius: 6.0)
     }
 
     // MARK: - Public
@@ -68,6 +69,81 @@ private extension MovieCardView {
         setupHierarchy()
         setupConstraints()
         
+        setupTitle()
+        setupDescriptionButton()
+        setupUndoButton()
+
+        mainPosterView.contentMode = .scaleAspectFit
+        mainPosterView.clipsToBounds = true
+    }
+
+    func setupHierarchy() {
+        self.addSubviews([
+            backgroundPosterView,
+            posterBlurView,
+            substrateView,
+            actionsView,
+            mainPosterView,
+            undoButton,
+        ])
+
+        substrateView.addSubviews([
+            titleLabel,
+            infoLabel,
+            genresLabel,
+            descriptionButton,
+        ])
+    }
+
+    func setupConstraints() {
+        backgroundPosterView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        posterBlurView.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+        undoButton.snp.makeConstraints { make in
+            make.size.equalTo(30)
+            make.top.equalToSuperview().inset(70)
+            make.leading.equalToSuperview().inset(15)
+        }
+
+        mainPosterView.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalToSuperview().inset(2 * LayoutConfig.horizontalInset)
+            make.bottom.equalTo(substrateView.snp.top).offset(-20)
+        }
+
+        substrateView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.61)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(actionsView.snp.top).offset(-10)
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(15)
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+        }
+
+        infoLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+        }
+
+        genresLabel.snp.makeConstraints { make in
+            make.top.equalTo(infoLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+        }
+
+        descriptionButton.snp.makeConstraints { make in
+            make.top.equalTo(genresLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().inset(LayoutConfig.horizontalInset)
+        }
+
+        actionsView.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
+            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(25)
+        }
+    }
+
+    func setupTitle() {
         titleLabel.textColor = .white
         if #available(iOS 16.0, *) {
             titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .black, width: .expanded)
@@ -75,6 +151,10 @@ private extension MovieCardView {
             titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         }
 
+        titleLabel.numberOfLines = 2
+    }
+
+    func setupDescriptionButton() {
         var moreConf = UIButton.Configuration.filled()
         moreConf.title = "Подробнее о фильме"
         moreConf.titleAlignment = .leading
@@ -92,75 +172,33 @@ private extension MovieCardView {
             return outgoing
         }
 
-        moreAboutButton.configuration = moreConf
+        descriptionButton.configuration = moreConf
 
-        moreAboutButton.tintColor = UIColor(hex: 0xEFC944)
-        moreAboutButton.setTitleColor(.white, for: .normal)
-    }
+        descriptionButton.tintColor = UIColor(hex: 0xFF7E24)
+        descriptionButton.setTitleColor(.white, for: .normal)
 
-    func setupHierarchy() {
-        self.addSubviews([
-            posterImageView,
-            gradientView,
-            substrateView,
-        ])
-
-        substrateView.addSubviews([
-            titleLabel,
-            infoLabel,
-            genresLabel,
-            actionsView,
-            moreAboutButton,
-        ])
-    }
-
-    func setupConstraints() {
-        posterImageView.snp.makeConstraints { $0.edges.equalToSuperview() }
-        gradientView.snp.makeConstraints { $0.edges.equalToSuperview() }
-
-        substrateView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.6)
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalToSuperview()
+        descriptionButton.onTap { [weak self] in
+            guard let description = self?.viewModel?.description else { return }
+            MovieCardViewModel.onDescriptionTap?(description)
         }
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
-        }
-
-        infoLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
-        }
-
-        genresLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
-        }
-
-        moreAboutButton.snp.makeConstraints { make in
-            make.top.equalTo(genresLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().inset(LayoutConfig.horizontalInset)
-        }
-
-        actionsView.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(moreAboutButton.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset * 2)
-            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(25)
-        }
-    }
-
-    func setupGradientView() {
-        gradientView.colors = Constants.gradientFade
-        gradientView.alpha = Constants.gradientFadeAlpha
-        gradientView.locations = Constants.gradientFadeLocations
-        gradientView.isUserInteractionEnabled = false
     }
 
     func setupActionsView() {
         actionsView.onLikeTap = MovieCardViewModel.onLikeTap
         actionsView.onDislikeTap = MovieCardViewModel.onDislikeTap
+    }
+
+    func setupUndoButton() {
+        var conf = UIButton.Configuration.filled()
+        conf.image = Constants.undoButtonImage
+        conf.imagePlacement = .all
+
+        undoButton.configuration = conf
+        undoButton.tintColor = .black
+
+        undoButton.onTap {
+            MovieCardViewModel.onUndoTap?()
+        }
     }
 
     // MARK: - Update card with viewModel
@@ -169,13 +207,12 @@ private extension MovieCardView {
         guard let viewModel else { return }
 
         if viewModel.canUndo {
-            undoButton.image = viewModel.undoImage
-            undoButton.onTap = MovieCardViewModel.onUndoTap
             undoButton.isHidden = false
         }
 
         if let posterURL = viewModel.posterURL {
-            posterImageView.af.setImage(withURL: posterURL, placeholderImage: Constants.placeholderImage)
+            mainPosterView.af.setImage(withURL: posterURL, placeholderImage: Constants.placeholderImage)
+            backgroundPosterView.af.setImage(withURL: posterURL, placeholderImage: Constants.placeholderImage)
         }
 
         titleLabel.text = viewModel.title
@@ -190,15 +227,8 @@ private extension MovieCardView {
 
     enum Constants {
         static let placeholderImage = UIImage(systemName: "photo")
-        static let gradientFadeAlpha: CGFloat = 0.75
-        static let gradientFadeLocations: [CGFloat] = [
-            0.0, 0.5, 1.0,
-        ]
-        static let gradientFade: [UIColor] = [
-            .clear,
-            .black.withAlphaComponent(0.4),
-            .black.withAlphaComponent(0.8),
-        ]
+        static let undoButtonImage = UIImage(systemName: "arrow.uturn.backward.square.fill")?
+            .applyingSymbolConfiguration(.init(pointSize: 30))
     }
 
     enum LayoutConfig {
