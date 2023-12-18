@@ -5,6 +5,7 @@
 //  Created by denis.beloshitsky on 30.10.2023.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -24,6 +25,8 @@ final class LobbyPageViewModel {
     private(set) var roomID: String?
     private(set) var textFieldPlaceholder: String?
 
+    private var cancellable: AnyCancellable?
+
     init(action: LobbyAction) {
         self.action = action
 
@@ -38,6 +41,12 @@ final class LobbyPageViewModel {
         }
 
         createLobbyIfNeeded()
+        cancellable = ApiClient.shared.$lobbyInfo
+            .receive(on: DispatchQueue.main)
+            .filter { $0?.appState == .joinTimeout }
+            .sink { [weak self] _ in
+                self?.onTimeout()
+            }
     }
 
     func createLobbyIfNeeded() {
@@ -45,6 +54,7 @@ final class LobbyPageViewModel {
         Task {
             do {
                 roomID = try await ApiClient.shared.createLobby().uppercased()
+                ApiClient.shared.startPolling()
             } catch {
                 await AlertController.showAlert(vc: vc, error: error)
             }
@@ -56,7 +66,8 @@ final class LobbyPageViewModel {
         Task {
             do {
                 try await ApiClient.shared.joinLobby(lobbyId: lobbyId)
-                // redirect to waiting room (???)
+                ApiClient.shared.startPolling()
+                await Router.shared.navigate(in: vc?.navigationController, to: .waitingPage(.join), makeRoot: true)
             } catch {
                 await AlertController.showAlert(vc: vc, error: error)
             }
@@ -68,6 +79,7 @@ final class LobbyPageViewModel {
         Task {
             try? await ApiClient.shared.deleteLobby()
         }
+        ApiClient.shared.stopPolling()
         Router.shared.navigateBack(in: vc?.navigationController)
     }
 
@@ -84,7 +96,13 @@ final class LobbyPageViewModel {
         }
     }
 
-    func canContinue(_ str: String) -> Bool {
-        action == .create && ApiClient.shared.lobbyInfo?.appState == .readyToStart || action == .join && !str.isEmpty
+    func onTimeout() {
+        Task {
+            await Router.shared.navigateBack(in: vc?.navigationController)
+            await AlertController.showAlert(vc: vc, errorInfo: .init("Время вышло",
+                                                                     "Вы не успели присоединиться к комнате",
+                                                                     "Хорошо",
+                                                                     nil))
+        }
     }
 }

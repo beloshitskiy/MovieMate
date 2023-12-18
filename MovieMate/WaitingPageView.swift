@@ -9,6 +9,12 @@ import UIKit
 import Combine
 
 final class WaitingPageView: UIView {
+    var useSolidBackground = false {
+        didSet {
+            backgroundImage.isHidden = useSolidBackground
+        }
+    }
+
     private let title = UILabel()
     private let subtitle = UILabel()
     private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))

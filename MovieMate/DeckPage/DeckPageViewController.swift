@@ -13,6 +13,7 @@ import UIKit
 final class DeckPageViewController: UIViewController {
     private let deckView = SwipeCardStack()
     private let dataSource = DeckPageDataSource()
+    private let emptyDeckView = WaitingPageView()
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -21,6 +22,7 @@ final class DeckPageViewController: UIViewController {
         dataSource.vc = self
         deckView.dataSource = dataSource
         deckView.delegate = self
+        navigationController?.isNavigationBarHidden = true
 
         dataSource.$movies
             .receive(on: DispatchQueue.main)
@@ -49,7 +51,11 @@ final class DeckPageViewController: UIViewController {
                                    to: .resultPage(.bad),
                                    makeRoot: true)
         case .choosingMoviesTimeout:
-            Router.shared.navigate(in: self.navigationController, to: .welcomePage, makeRoot: true)
+            AlertController.showAlert(vc: self, errorInfo: .init("Время вышло",
+                                                                 "Кто-то из пользователей не успел выбрать фильмы",
+                                                                 "Бывает") { [weak self] in
+                Router.shared.navigate(in: self?.navigationController, to: .welcomePage, makeRoot: true)
+            })
         default:
             break
         }
@@ -62,9 +68,14 @@ final class DeckPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubviews([
+            emptyDeckView,
+            deckView
+        ])
 
-        view.addSubview(deckView)
         deckView.cardStackInsets = .zero
+        emptyDeckView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        emptyDeckView.useSolidBackground = true
         deckView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 }
@@ -85,6 +96,7 @@ extension DeckPageViewController: SwipeCardStackDelegate {
     }
 
     func didSwipeAllCards(_ cardStack: SwipeCardStack) {
+        emptyDeckView.startAnimating()
         Task {
             await ApiClient.shared.notifyEmpty()
         }

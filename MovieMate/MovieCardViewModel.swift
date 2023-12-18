@@ -27,7 +27,7 @@ final class MovieCardViewModel {
         self.title = movie.name
         self.description = movie.description
         self.posterURL = movie.posterURL
-        self.rating = movie.rating
+        self.rating = movie.rating != "0.0" ? movie.rating : movie.kpRating
         self.releaseYear = movie.releaseYear
         self.duration = movie.duration
         self.genres = movie.genres

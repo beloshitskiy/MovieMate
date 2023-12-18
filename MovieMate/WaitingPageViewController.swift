@@ -61,6 +61,14 @@ final class WaitingPageViewController: UIViewController {
             return
         }
 
+        if info.appState == .choosingGenresTimeout {
+            AlertController.showAlert(vc: self, errorInfo: .init("Время вышло",
+                                                                 "Кто-то из пользователей не успел выбрать жанры",
+                                                                 "Бывает") { [weak self] in
+                    Router.shared.navigate(in: self?.navigationController, to: .welcomePage, makeRoot: true)
+                })
+        }
+
         let targetState: AppState
         let targetPage: Page
         switch type {

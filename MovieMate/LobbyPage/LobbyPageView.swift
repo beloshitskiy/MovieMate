@@ -20,6 +20,7 @@ final class LobbyPageView: UIView {
     private lazy var textField = UITextField()
     private let continueButton = UIButton()
     private lazy var cancelRoomCreationButton = UIButton()
+    private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
 
     @Published
     private var probablyRoomID = ""
@@ -29,8 +30,6 @@ final class LobbyPageView: UIView {
         guard self.viewModel == nil else { return }
         self.viewModel = viewModel
         setupLobby()
-
-        self.backgroundColor = .red
     }
 }
 
@@ -47,6 +46,7 @@ private extension LobbyPageView {
         guard let action = viewModel?.action else { return }
 
         self.addSubviews([
+            backgroundImage,
             headerLabel,
             continueButton,
         ])
@@ -66,12 +66,14 @@ private extension LobbyPageView {
         guard let action = viewModel?.action else { return }
         registerAutomaticKeyboardConstraints()
 
+        backgroundImage.snp.makeConstraints { $0.edges.equalToSuperview() }
+
         headerLabel.snp.prepareConstraints { make in
             make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.32).keyboard(true, in: self)
         }
 
         headerLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.58).keyboard(false, in: self)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.61).keyboard(false, in: self)
             make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
         }
 
@@ -140,16 +142,14 @@ private extension LobbyPageView {
         }
 
         roomIDLabel.textColor = .white
-        roomIDLabel.text = viewModel?.roomID
-        roomIDLabel.isSkeletonable = true
-        roomIDLabel.showAnimatedGradientSkeleton()
+        roomIDLabel.text = "YOURID"
 
         viewModel?.$roomID
             .receive(on: DispatchQueue.main)
+            .filter { !($0?.isEmpty ?? true) }
             .sink { [weak self] in
                 guard let label = self?.roomIDLabel else { return }
                 label.text = $0
-                label.hideSkeleton()
             }.store(in: &cancellables)
     }
 
@@ -196,18 +196,38 @@ private extension LobbyPageView {
             }
             return outgoing
         }
-        continueButton.configuration = conf
 
-        continueButton.tintColor = .white
+        let updateHandler: UIButton.ConfigurationUpdateHandler = { button in
+            switch button.state {
+            case .disabled:
+                button.configuration?.baseBackgroundColor = .gray
+            default:
+                button.configuration?.baseBackgroundColor = .white
+            }
+        }
+
+        continueButton.configurationUpdateHandler = updateHandler
+
+        continueButton.configuration = conf
         continueButton.setTitle(viewModel?.continueButtonTitle, for: .normal)
         continueButton.setTitleColor(.black, for: .normal)
+        continueButton.setTitleColor(.white, for: .disabled)
 
-        $probablyRoomID
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] str in
-                guard let self else { return }
-                self.continueButton.isEnabled = self.viewModel?.canContinue(str) ?? false
-            }.store(in: &cancellables)
+        if viewModel?.action == .join {
+            $probablyRoomID
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] str in
+                    guard let self, let action = self.viewModel?.action else { return }
+                    self.continueButton.isEnabled = action == .join && !str.isEmpty
+                }.store(in: &cancellables)
+        } else {
+            ApiClient.shared.$lobbyInfo
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] info in
+                    self?.continueButton.isEnabled = info?.appState == .readyToStart
+                }
+                .store(in: &cancellables)
+        }
 
         continueButton.onTap { [weak self] in
             guard let vm = self?.viewModel else { return }
@@ -236,7 +256,7 @@ private extension LobbyPageView {
 
         cancelRoomCreationButton.tintColor = .white
         cancelRoomCreationButton.setTitle("Распустить лобби", for: .normal)
-        cancelRoomCreationButton.setTitleColor(.black, for: .normal)
+        cancelRoomCreationButton.setTitleColor(.white, for: .normal)
 
         cancelRoomCreationButton.onTap { [weak self] in
             self?.viewModel?.cancelRoomCreation()

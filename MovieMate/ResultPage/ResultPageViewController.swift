@@ -25,7 +25,7 @@ final class ResultPageViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .filter { $0?.appState == .choosingGenres }
             .sink { [weak self] _ in
-                Router.shared.navigate(in: self?.navigationController, to: .genresChoosingPage)
+                Router.shared.navigate(in: self?.navigationController, to: .genresChoosingPage, makeRoot: true)
             }
     }
 

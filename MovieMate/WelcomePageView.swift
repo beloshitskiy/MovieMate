@@ -8,14 +8,15 @@
 import HandlersKit
 import SnapKit
 import UIKit
+import YYText
 
 final class WelcomePageView: UIView {
     private var viewModel: WelcomePageViewModel?
 
     private let createLobbyButton = UIButton()
     private let joinLobbyButton = UIButton()
-    private let imageView = UIImageView()
-    private let title = UILabel()
+    private let backgroundImage = UIImageView(image: .init(named: "welcome"))
+    private let title = YYLabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +39,7 @@ private extension WelcomePageView {
 
     func setupUI() {
         self.addSubviews([
-            imageView,
+            backgroundImage,
             title,
             createLobbyButton,
             joinLobbyButton,
@@ -49,20 +50,18 @@ private extension WelcomePageView {
         setupTitle()
         setupCreateLobbyButton()
         setupJoinLobbyButton()
-
-        imageView.image = UIImage(named: "welcome")
     }
 
     func setupConstraints() {
-        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        backgroundImage.snp.makeConstraints { $0.edges.equalToSuperview() }
 
         title.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.58)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height * 0.61)
             make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
         }
 
         createLobbyButton.snp.makeConstraints { make in
-            make.top.equalTo(title.snp.bottom).offset(20)
+            make.top.equalTo(title.snp.bottom).offset(10)
             make.height.equalTo(50)
             make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
         }
@@ -77,10 +76,15 @@ private extension WelcomePageView {
 
     func setupTitle() {
         title.text = "Добро\nпожаловать\nв MovieMate"
-        title.font = .systemFont(ofSize: 50, weight: .black)
+        if #available(iOS 16.0, *) {
+            title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
+        } else {
+            title.font = .systemFont(ofSize: 50, weight: .black)
+        }
         title.textColor = .white
         title.numberOfLines = 3
         title.textAlignment = .left
+        title.textVerticalAlignment = .top
     }
 
     func setupCreateLobbyButton() {
@@ -88,7 +92,11 @@ private extension WelcomePageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            if #available(iOS 16.0, *) {
+                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
+            } else {
+                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            }
             return outgoing
         }
 
@@ -108,7 +116,11 @@ private extension WelcomePageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            if #available(iOS 16.0, *) {
+                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
+            } else {
+                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            }
             return outgoing
         }
 

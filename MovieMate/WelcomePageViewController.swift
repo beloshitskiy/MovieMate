@@ -26,6 +26,8 @@ final class WelcomePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.backButtonTitle = "Назад"
+
         view.addSubview(welcomeView)
         welcomeView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
