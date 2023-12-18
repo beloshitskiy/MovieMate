@@ -6,22 +6,24 @@
 //
 
 import Alamofire
+import Combine
 import Foundation
 
 final class ApiClient {
     static let shared = ApiClient()
-    private static let pollingManager = PollingManager()
 
-    var currentState: AppState {
-        lobbyInfo?.appState ?? .notReadyToStart
-    }
+    @Published
+    private(set) var lobbyInfo: LobbyInfo?
+
+    private static let pollingManager = PollingManager()
 
     private let mainURL = "http://51.250.2.222:8081/v1"
     private let headers = HTTPHeaders([.init(name: "X-Device-Token", 
                                              value: UIDevice.current.identifierForVendor?.uuidString ?? "")])
-    private var lobbyInfo: LobbyInfo?
 
-    private var lobbyId: String { lobbyInfo?.code ?? "" }
+    private var lobbyId: String { lobbyInfo?.lobbyId ?? "" }
+
+    private init() {}
 
     // MARK: - Polling manager
 
@@ -45,7 +47,7 @@ final class ApiClient {
         case let .success(lobbyInfo):
             self.lobbyInfo = lobbyInfo
         case .failure:
-            print("beda")
+            self.lobbyInfo = nil
         }
     }
 
@@ -57,19 +59,70 @@ final class ApiClient {
             .serializingDecodable(LobbyInfo.self)
             .response
 
-        print(response.debugDescription)
+//        print(response.debugDescription)
 
         switch response.result {
         case let .success(lobbyInfo):
             self.lobbyInfo = lobbyInfo
             return lobbyInfo.code
         case .failure:
-            throw ApiError.serverError
+            throw ApiError.unableToCreateLobby
         }
     }
 
     func joinLobby(lobbyId: String) async throws {
-        let response = await AF.request(mainURL + "/lobbies/join/\(lobbyId)", method: .post, headers: headers)
+        let response = await AF.request(mainURL + "/lobbies:join",
+                                        method: .post,
+                                        parameters: ["token": lobbyId],
+                                        headers: headers)
+            .validate()
+            .serializingDecodable(LobbyInfo.self)
+            .response
+
+//        print(response.debugDescription)
+
+        switch response.result {
+        case let .success(lobbyInfo):
+            self.lobbyInfo = lobbyInfo
+        case .failure:
+            throw ApiError.incorrectId
+        }
+    }
+
+    func deleteLobby() async throws {
+        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)", method: .delete, headers: headers)
+            .validate()
+            .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
+            .response
+
+//        print(response.debugDescription)
+
+        switch response.result {
+        case .success:
+            self.lobbyInfo = nil
+        case .failure:
+            throw ApiError.unableToDeleteLobby
+        }
+    }
+
+    func startLobby() async throws -> Bool {
+        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/start", method: .post, headers: headers)
+            .validate()
+            .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
+            .response
+
+//        print(response.debugDescription)
+
+        switch response.result {
+        case .success:
+            return true
+        case .failure:
+            throw ApiError.unableToStartLobby
+        }
+    }
+
+    func restartLobby() async throws {
+        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/restart", method: .post, headers: headers)
             .validate()
             .serializingDecodable(LobbyInfo.self)
             .response
@@ -80,55 +133,7 @@ final class ApiClient {
         case let .success(lobbyInfo):
             self.lobbyInfo = lobbyInfo
         case .failure:
-            throw ApiError.serverError
-        }
-    }
-
-    func deleteLobby() async throws -> Bool {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)", method: .delete, headers: headers)
-            .validate()
-            .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
-            .response
-
-        print(response.debugDescription)
-
-        switch response.result {
-        case .success:
-            return true
-        case .failure:
-            throw ApiError.serverError
-        }
-    }
-
-    func startLobby() async throws -> Bool {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/start", method: .post, headers: headers)
-            .validate()
-            .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
-            .response
-
-        print(response.debugDescription)
-
-        switch response.result {
-        case .success:
-            return true
-        case .failure:
-            throw ApiError.serverError
-        }
-    }
-
-    func restartLobby() async throws -> Bool {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/restart", method: .delete, headers: headers)
-            .validate()
-            .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
-            .response
-
-        print(response.debugDescription)
-
-        switch response.result {
-        case .success:
-            return true
-        case .failure:
-            throw ApiError.serverError
+            throw ApiError.unableToRestartLobby
         }
     }
 
@@ -140,36 +145,41 @@ final class ApiClient {
             .serializingDecodable([String].self)
             .response
 
-        print(response.debugDescription)
+//        print(response.debugDescription)
 
         switch response.result {
         case let .success(result):
             return result
         case .failure:
-            throw ApiError.serverError
+            throw ApiError.unableToGetGenres
         }
     }
 
     func confirmSelected(_ genres: [String]) async throws -> Bool {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/sessions", method: .post, headers: headers)
+        let encoder = URLEncodedFormParameterEncoder(encoder: .init(arrayEncoding: .noBrackets))
+        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/sessions",
+                                        method: .post,
+                                        parameters: ["ids": genres],
+                                        encoder: encoder,
+                                        headers: headers)
             .validate()
             .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
             .response
 
-        print(response.debugDescription)
+//        print(response.debugDescription)
 
         switch response.result {
         case .success:
             return true
         case .failure:
-            throw ApiError.serverError
+            throw ApiError.unableToConfirmGenres
         }
     }
 
     // MARK: - Deck
 
     func getMovies() async throws -> [Movie] {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/films", method: .post, headers: headers)
+        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/films", method: .get, headers: headers)
             .validate()
             .serializingDecodable([Movie].self)
             .response
@@ -178,40 +188,37 @@ final class ApiClient {
         case let .success(result):
             return result
         case .failure:
-            throw ApiError.serverError
+            throw ApiError.unableToGetMovies
         }
     }
 
-    func like(movie: Movie) async throws -> Bool {
+    func like(movie: Movie) async {
         let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/films/\(movie.id)", method: .post, headers: headers)
             .validate()
             .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
             .response
 
-        print(response.debugDescription)
-
-        switch response.result {
-        case .success:
-            return true
-        case .failure:
-            throw ApiError.serverError
-        }
+//        print(response.debugDescription)
     }
 
-    func undoLike(movie: Movie) async throws -> Bool {
+    func undoLike(movie: Movie) async {
         let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/films/\(movie.id)", method: .delete, headers: headers)
             .validate()
             .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
             .response
 
-        print(response.debugDescription)
+//        print(response.debugDescription)
+    }
 
-        switch response.result {
-        case .success:
-            return true
-        case .failure:
-            throw ApiError.serverError
-        }
+    func notifyEmpty() async {
+        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/userFinishChoosing", 
+                                        method: .post,
+                                        headers: headers)
+            .validate()
+            .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
+            .response
+
+//        print(response.debugDescription)
     }
 }
 

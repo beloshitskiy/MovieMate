@@ -9,29 +9,30 @@ import UIKit
 
 enum Page {
     case welcomePage
-    case createLobbyPage(LobbyPageViewModel)
-    case joinLobbyPage(LobbyPageViewModel)
+    case createLobbyPage
+    case joinLobbyPage
+    case waitingPage(WaitingPageViewController.WaitingType)
     case genresChoosingPage
     case deckPage
-    case goodResultPage
-    case badResultPage
+    case resultPage(ResultPageViewModel.Result)
 }
 
 extension Page {
     func vc() -> UIViewController {
         switch self {
-        case .welcomePage:
-            return WelcomePageViewController()
+        case .welcomePage: WelcomePageViewController()
 
-        case let .createLobbyPage(vm), let .joinLobbyPage(vm):
-            return LobbyPageViewController(with: vm)
+        case .createLobbyPage: LobbyPageViewController(with: .init(action: .create))
 
-        case .genresChoosingPage:
-            return GenrePageViewController()
+        case .joinLobbyPage: LobbyPageViewController(with: .init(action: .join))
 
+        case let .waitingPage(type): WaitingPageViewController(type: type)
 
-        default:
-            return UIViewController()
+        case .genresChoosingPage: GenrePageViewController()
+
+        case .deckPage: DeckPageViewController()
+
+        case let .resultPage(result): ResultPageViewController(with: .init(result: result))
         }
     }
 }
