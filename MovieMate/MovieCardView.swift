@@ -101,7 +101,7 @@ private extension MovieCardView {
 
         undoButton.snp.makeConstraints { make in
             make.size.equalTo(30)
-            make.top.equalToSuperview().inset(70)
+            make.top.equalTo(self.safeAreaLayoutGuide)
             make.leading.equalToSuperview().inset(15)
         }
 
@@ -139,7 +139,7 @@ private extension MovieCardView {
 
         actionsView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(LayoutConfig.horizontalInset)
-            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(25)
+            make.bottom.equalToSuperview().inset(45)
         }
     }
 
@@ -158,9 +158,6 @@ private extension MovieCardView {
         var moreConf = UIButton.Configuration.filled()
         moreConf.title = "Подробнее о фильме"
         moreConf.titleAlignment = .leading
-        moreConf.imagePlacement = .trailing
-        moreConf.imagePadding = 5.0
-        moreConf.image = UIImage(systemName: "info.square.fill")
 
         moreConf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -199,6 +196,8 @@ private extension MovieCardView {
         undoButton.onTap {
             MovieCardViewModel.onUndoTap?()
         }
+
+        undoButton.isHidden = true
     }
 
     // MARK: - Update card with viewModel

@@ -7,10 +7,13 @@
 
 import SnapKit
 import UIKit
+import Combine
 
 final class GenrePageViewController: UIViewController {
     private let genreView: GenrePageView
     private let viewModel: GenrePageViewModel
+
+    private var cancellable: AnyCancellable?
 
     init() {
         viewModel = GenrePageViewModel()
@@ -21,6 +24,13 @@ final class GenrePageViewController: UIViewController {
         genreView.tableView.register(cellWithClass: GenreCell.self)
         genreView.tableView.delegate = self
         genreView.tableView.dataSource = self
+
+        cancellable = ApiClient.shared.$lobbyInfo
+            .receive(on: DispatchQueue.main)
+            .filter { $0?.appState == .choosingMoviesTimeout }
+            .sink { [weak self] _ in
+                self?.onTimeout()
+            }
     }
 
     override func viewDidLoad() {
@@ -38,6 +48,14 @@ final class GenrePageViewController: UIViewController {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func onTimeout() {
+        AlertController.showAlert(vc: self, errorInfo: .init("Время вышло",
+                                                             "Вы не успели выбрать жанры",
+                                                             "Бывает") { [weak self] in
+            Router.shared.navigate(in: self?.navigationController, to: .welcomePage, makeRoot: true)
+        })
     }
 }
 

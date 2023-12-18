@@ -112,7 +112,7 @@ private extension ResultPageView {
         switch viewModel.result {
         case .good:
             title.text = viewModel.matchedMovie?.name
-            subtitle.text = viewModel.matchedMovie?.name.count ?? 0 <= 9 ? "Приятного просмотра! 🍿" : ""
+            subtitle.text = "🍿🍿🍿"
         case .bad:
             title.text = "Сожалеем 😢"
             subtitle.text = "Найти фильм не удалось 🫠"

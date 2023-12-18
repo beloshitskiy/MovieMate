@@ -27,12 +27,13 @@ final class ResultPageViewModel {
     func restartSession() {
         Task {
             try await ApiClient.shared.restartLobby()
-            await Router.shared.navigate(in: vc?.navigationController, to: .genresChoosingPage)
+            await Router.shared.navigate(in: vc?.navigationController, to: .genresChoosingPage, makeRoot: true)
         }
     }
 
     func leaveSession() {
         Task {
+            ApiClient.shared.stopPolling()
             await Router.shared.navigate(in: vc?.navigationController, to: .welcomePage, makeRoot: true)
         }
     }
