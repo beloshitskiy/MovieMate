@@ -76,11 +76,7 @@ private extension WelcomePageView {
 
     func setupTitle() {
         title.text = "Добро\nпожаловать\nв MovieMate"
-        if #available(iOS 16.0, *) {
-            title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
-        } else {
-            title.font = .systemFont(ofSize: 50, weight: .black)
-        }
+        title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
         title.textColor = .white
         title.numberOfLines = 3
         title.textAlignment = .left
@@ -92,11 +88,7 @@ private extension WelcomePageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
             return outgoing
         }
 
@@ -116,11 +108,7 @@ private extension WelcomePageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
             return outgoing
         }
 

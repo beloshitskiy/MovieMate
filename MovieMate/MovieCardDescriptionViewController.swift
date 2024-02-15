@@ -45,11 +45,7 @@ final class MovieCardDescriptionViewController: UIViewController {
 private extension MovieCardDescriptionViewController {
     func setupTitle() {
         titleLabel.text = "О фильме"
-        if #available(iOS 16.0, *) {
-            titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black, width: .expanded)
-        } else {
-            titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black)
-        }
+        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black, width: .expanded)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .left
         titleLabel.backgroundColor = .clear
@@ -60,13 +56,7 @@ private extension MovieCardDescriptionViewController {
         textView.isEditable = false
         textView.isSelectable = false
         textView.backgroundColor = .clear
-
-        if #available(iOS 16.0, *) {
-            textView.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
-        } else {
-            textView.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        }
-
+        textView.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
         textView.textColor = .white
     }
 }

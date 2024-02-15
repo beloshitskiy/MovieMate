@@ -87,11 +87,7 @@ private extension GenrePageView {
 
     func setupTitle() {
         titleLabel.text = "Выберите жанр(ы)"
-        if #available(iOS 16.0, *) {
-            titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black, width: .expanded)
-        } else {
-            titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black)
-        }
+        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .black, width: .expanded)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .left
     }
@@ -101,11 +97,7 @@ private extension GenrePageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
             return outgoing
         }
 
@@ -132,11 +124,7 @@ private extension GenrePageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
             return outgoing
         }
 

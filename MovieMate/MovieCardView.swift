@@ -145,12 +145,7 @@ private extension MovieCardView {
 
     func setupTitle() {
         titleLabel.textColor = .white
-        if #available(iOS 16.0, *) {
-            titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .black, width: .expanded)
-        } else {
-            titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        }
-
+        titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .black, width: .expanded)
         titleLabel.numberOfLines = 2
     }
 
@@ -161,11 +156,7 @@ private extension MovieCardView {
 
         moreConf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .medium, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .medium, width: .expanded)
             return outgoing
         }
 

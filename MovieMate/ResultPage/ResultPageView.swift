@@ -118,23 +118,14 @@ private extension ResultPageView {
             subtitle.text = "Найти фильм не удалось 🫠"
         }
 
-        if #available(iOS 16.0, *) {
-            title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
-        } else {
-            title.font = .systemFont(ofSize: 50, weight: .black)
-        }
+        title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
         title.textColor = .white
         title.textAlignment = .left
         title.numberOfLines = 2
 
         subtitle.numberOfLines = 2
         subtitle.textColor = .white
-
-        if #available(iOS 16.0, *) {
-            subtitle.font = .systemFont(ofSize: 40, weight: .medium, width: .expanded)
-        } else {
-            subtitle.font = .systemFont(ofSize: 40, weight: .black)
-        }
+        subtitle.font = .systemFont(ofSize: 40, weight: .medium, width: .expanded)
     }
 
     func setupRestartButton() {
@@ -142,11 +133,7 @@ private extension ResultPageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
             return outgoing
         }
 
@@ -165,11 +152,7 @@ private extension ResultPageView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
             return outgoing
         }
 

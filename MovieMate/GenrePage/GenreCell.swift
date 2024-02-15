@@ -41,11 +41,7 @@ final class GenreCell: UITableViewCell {
         var content = self.defaultContentConfiguration()
         content.text = genre
         content.textProperties.color = .white
-        if #available(iOS 16.0, *) {
-            content.textProperties.font = UIFont.systemFont(ofSize: 20, weight: .medium, width: .expanded)
-        } else {
-            content.textProperties.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        }
+        content.textProperties.font = UIFont.systemFont(ofSize: 20, weight: .medium, width: .expanded)
 
         self.contentConfiguration = content
     }

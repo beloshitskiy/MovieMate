@@ -124,23 +124,13 @@ private extension LobbyPageView {
         headerLabel.textColor = .white
 
         headerLabel.numberOfLines = 2
-
-        if #available(iOS 16.0, *) {
-            headerLabel.font = .systemFont(ofSize: 42, weight: .black, width: .expanded)
-        } else {
-            headerLabel.font = .systemFont(ofSize: 50, weight: .black)
-        }
+        headerLabel.font = .systemFont(ofSize: 42, weight: .black, width: .expanded)
     }
 
     func setupRoomIDLabel() {
         guard viewModel?.action == .create else { return }
 
-        if #available(iOS 16.0, *) {
-            roomIDLabel.font = .systemFont(ofSize: 65, weight: .black, width: .expanded)
-        } else {
-            roomIDLabel.font = .systemFont(ofSize: 60, weight: .black)
-        }
-
+        roomIDLabel.font = .systemFont(ofSize: 65, weight: .black, width: .expanded)
         roomIDLabel.textColor = .white
         roomIDLabel.text = "YOURID"
 
@@ -158,12 +148,7 @@ private extension LobbyPageView {
 
         textField.placeholder = viewModel?.textFieldPlaceholder
 
-        if #available(iOS 16.0, *) {
-            textField.font = .systemFont(ofSize: 40, weight: .medium, width: .expanded)
-        } else {
-            textField.font = .systemFont(ofSize: 40, weight: .black)
-        }
-
+        textField.font = .systemFont(ofSize: 40, weight: .medium, width: .expanded)
         textField.textColor = .white
         textField.autocapitalizationType = .allCharacters
         textField.autocorrectionType = .no
@@ -189,11 +174,7 @@ private extension LobbyPageView {
         var conf = UIButton.Configuration.filled()
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold, width: .expanded)
             return outgoing
         }
 
@@ -245,11 +226,7 @@ private extension LobbyPageView {
         var conf = UIButton.Configuration.plain()
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .semibold, width: .expanded)
             return outgoing
         }
         cancelRoomCreationButton.configuration = conf

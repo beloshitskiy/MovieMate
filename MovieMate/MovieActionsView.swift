@@ -60,11 +60,7 @@ private extension MovieActionsView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold, width: .expanded)
             return outgoing
         }
 
@@ -82,11 +78,7 @@ private extension MovieActionsView {
 
         conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            if #available(iOS 16.0, *) {
-                outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold, width: .expanded)
-            } else {
-                outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            }
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold, width: .expanded)
             return outgoing
         }
 

@@ -11,19 +11,10 @@ final class MovieGenresLabel: UILabel {
     func setup(with viewModel: MovieCardViewModel) {
         let attrStr = NSMutableAttributedString()
 
-        let attrs: [NSAttributedString.Key : Any]
-
-        if #available(iOS 16.0, *) {
-            attrs = [
-                .foregroundColor: UIColor.white,
-                .font: UIFont.systemFont(ofSize: 17, weight: .medium, width: .expanded),
-            ]
-        } else {
-            attrs = [
-                .foregroundColor: UIColor.white,
-                .font: UIFont.boldSystemFont(ofSize: 17),
-            ]
-        }
+        let attrs: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 17, weight: .medium, width: .expanded),
+        ]
 
         let divider = NSAttributedString(string: " • ", attributes: attrs)
 

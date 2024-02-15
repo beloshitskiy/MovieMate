@@ -68,11 +68,7 @@ private extension WaitingPageView {
 
     func setupLabels() {
         title.text = "Отлично!"
-        if #available(iOS 16.0, *) {
-            title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
-        } else {
-            title.font = .systemFont(ofSize: 50, weight: .black)
-        }
+        title.font = .systemFont(ofSize: 43, weight: .black, width: .expanded)
         title.textColor = .white
         title.textAlignment = .left
 
@@ -80,11 +76,7 @@ private extension WaitingPageView {
         subtitle.numberOfLines = 2
         subtitle.textColor = .white
 
-        if #available(iOS 16.0, *) {
-            subtitle.font = .systemFont(ofSize: 40, weight: .medium, width: .expanded)
-        } else {
-            subtitle.font = .systemFont(ofSize: 40, weight: .black)
-        }
+        subtitle.font = .systemFont(ofSize: 40, weight: .medium, width: .expanded)
     }
 
     func setupConstraints() {
