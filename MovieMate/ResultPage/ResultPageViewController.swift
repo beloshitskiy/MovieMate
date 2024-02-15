@@ -19,7 +19,7 @@ final class ResultPageViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         viewModel.vc = self
-        resultPageView.confugure(with: viewModel)
+        resultPageView.configure(with: viewModel)
 
         cancellable = ApiClient.shared.$lobbyInfo
             .receive(on: DispatchQueue.main)

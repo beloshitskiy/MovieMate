@@ -55,6 +55,7 @@ final class DeckPageViewController: UIViewController {
                                                                  "Кто-то из пользователей не успел выбрать фильмы",
                                                                  "Бывает") { [weak self] in
                 Router.shared.navigate(in: self?.navigationController, to: .welcomePage, makeRoot: true)
+                ApiClient.shared.stopPolling()
             })
         default:
             break

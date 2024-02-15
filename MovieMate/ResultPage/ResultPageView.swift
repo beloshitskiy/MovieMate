@@ -21,7 +21,7 @@ final class ResultPageView: UIView {
 
     private lazy var moviePoster = UIImageView()
 
-    func confugure(with viewModel: ResultPageViewModel) {
+    func configure(with viewModel: ResultPageViewModel) {
         guard self.viewModel == nil else { return }
         self.viewModel = viewModel
         setupResultPage()
@@ -54,13 +54,15 @@ private extension ResultPageView {
             restartButton,
         ])
 
-        if viewModel.result == .good, let posterURL = viewModel.matchedMovie?.posterURL {
+        if viewModel.result == .good {
             self.addSubviews([
                 moviePoster,
             ])
 
-            moviePoster.af.setImage(withURL: posterURL)
-            moviePoster.clipsToBounds = true
+            if let posterURL = viewModel.matchedMovie?.posterURL {
+                moviePoster.af.setImage(withURL: posterURL)
+                moviePoster.clipsToBounds = true
+            }
         }
     }
 

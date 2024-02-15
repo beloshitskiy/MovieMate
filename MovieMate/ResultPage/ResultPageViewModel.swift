@@ -19,15 +19,18 @@ final class ResultPageViewModel {
     let result: Result
     let matchedMovie: Movie?
 
-    init(result: Result) {
+    convenience init(result: Result) {
+        self.init(result: result, matchedMovie: ApiClient.shared.lobbyInfo?.matchedMovie)
+    }
+
+    init(result: Result, matchedMovie: Movie?) {
         self.result = result
-        matchedMovie = ApiClient.shared.lobbyInfo?.matchedMovie
+        self.matchedMovie = matchedMovie
     }
 
     func restartSession() {
         Task {
             try await ApiClient.shared.restartLobby()
-            await Router.shared.navigate(in: vc?.navigationController, to: .genresChoosingPage, makeRoot: true)
         }
     }
 

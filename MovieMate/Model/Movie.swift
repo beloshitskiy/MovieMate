@@ -20,7 +20,7 @@ struct Movie {
 }
 
 extension Movie: Decodable {
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id = "filmId"
         case name
         case description
@@ -41,7 +41,10 @@ extension Movie: Decodable {
         releaseYear = try container.decode(String.self, forKey: .releaseYear)
 
         let durationInMinutes = (try TimeInterval(container.decode(String.self, forKey: .duration)) ?? 0.0) * 60
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: "ru")
         let formatter = DateComponentsFormatter()
+        formatter.calendar = calendar
         formatter.unitsStyle = .abbreviated
         formatter.zeroFormattingBehavior = .dropAll
         formatter.allowedUnits = [.hour, .minute]

@@ -56,10 +56,6 @@ final class MovieCardView: UIView {
         guard self.viewModel == nil else { return }
         self.viewModel = viewModel
     }
-
-    func prepareForReuse() {
-
-    }
 }
 
 private extension MovieCardView {
@@ -196,9 +192,7 @@ private extension MovieCardView {
     func updateCard() {
         guard let viewModel else { return }
 
-        if viewModel.canUndo {
-            undoButton.isHidden = false
-        }
+        undoButton.isHidden = !viewModel.canUndo
 
         if let posterURL = viewModel.posterURL {
             mainPosterView.af.setImage(withURL: posterURL, placeholderImage: Constants.placeholderImage)

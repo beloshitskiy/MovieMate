@@ -66,6 +66,7 @@ final class WaitingPageViewController: UIViewController {
                                                                  "Кто-то из пользователей не успел выбрать жанры",
                                                                  "Бывает") { [weak self] in
                     Router.shared.navigate(in: self?.navigationController, to: .welcomePage, makeRoot: true)
+                ApiClient.shared.stopPolling()
                 })
         }
 

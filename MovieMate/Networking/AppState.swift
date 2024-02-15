@@ -10,7 +10,7 @@ import Foundation
 enum AppState: String, Equatable {
     case notReadyToStart = "NOT_READY_TO_START"
     case readyToStart = "READY_TO_START"
-    case joinTimeout = "SESSION_TIMED_OUT"
+    case joinTimeout = "SESSION_START_TIMEOUT"
     case choosingGenres = "GENRES_CHOOSING"
     case choosingGenresTimeout = "GENRES_TIMEOUT"
     case choosingMovies = "FILMS_CHOOSING"

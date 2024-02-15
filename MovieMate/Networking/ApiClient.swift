@@ -129,10 +129,7 @@ final class ApiClient {
 
         print(response.debugDescription)
 
-        switch response.result {
-        case let .success(lobbyInfo):
-            self.lobbyInfo = lobbyInfo
-        case .failure:
+        if case .failure = response.result {
             throw ApiError.unableToRestartLobby
         }
     }
@@ -193,7 +190,7 @@ final class ApiClient {
     }
 
     func like(movie: Movie) async {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/films/\(movie.id)", method: .post, headers: headers)
+        let _ = await AF.request(mainURL + "/lobbies/\(lobbyId)/films/\(movie.id)", method: .post, headers: headers)
             .validate()
             .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
             .response
@@ -202,7 +199,7 @@ final class ApiClient {
     }
 
     func undoLike(movie: Movie) async {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/films/\(movie.id)", method: .delete, headers: headers)
+        let _ = await AF.request(mainURL + "/lobbies/\(lobbyId)/films/\(movie.id)", method: .delete, headers: headers)
             .validate()
             .serializingDecodable(EmptyEntity.self, emptyResponseCodes: [200])
             .response
@@ -211,7 +208,7 @@ final class ApiClient {
     }
 
     func notifyEmpty() async {
-        let response = await AF.request(mainURL + "/lobbies/\(lobbyId)/userFinishChoosing", 
+        let _ = await AF.request(mainURL + "/lobbies/\(lobbyId)/userFinishChoosing",
                                         method: .post,
                                         headers: headers)
             .validate()
