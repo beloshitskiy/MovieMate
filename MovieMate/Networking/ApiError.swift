@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ErrorInfo {
+struct ErrorInfo: Equatable {
     let title: String
     let message: String
     let buttonTitle: String
@@ -18,6 +18,10 @@ struct ErrorInfo {
         self.message = message
         self.buttonTitle = buttonTitle
         self.action = action
+    }
+    
+    static func == (lhs: ErrorInfo, rhs: ErrorInfo) -> Bool {
+        lhs.title == rhs.title && lhs.message == rhs.message && lhs.buttonTitle == rhs.buttonTitle
     }
 }
 

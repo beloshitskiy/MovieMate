@@ -39,3 +39,15 @@ extension LobbyInfo: Decodable {
         matchedMovie = try container.decodeIfPresent(Movie.self, forKey: .matchedMovie)
     }
 }
+
+extension LobbyInfo {
+    static let mock = LobbyInfo(
+        lobbyId: "123",
+        code: "123",
+        appState: .finished,
+        genresChosen: ["Action", "Comedy"],
+        usersJoined: ["Denis", "Vlad"],
+        isAvailableToStart: true,
+        matchedMovie: Movie.mock
+    )
+}

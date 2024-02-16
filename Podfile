@@ -2,10 +2,8 @@ source 'https://cdn.cocoapods.org/'
 
 platform :ios, '15.0'
 
-target 'MovieMate' do
-  use_frameworks!
 
-  # Pods for MovieMate
+def app_pods
   pod 'SnapKit'
   pod 'HandlersKit'
   pod 'Alamofire'
@@ -15,6 +13,20 @@ target 'MovieMate' do
   pod 'SkeletonView'
   pod 'Shuffle-iOS'
   pod 'YYText'
+
+end
+
+def test_pods
+  pod 'OHHTTPStubs/Swift'
+
+end
+
+target 'MovieMate' do
+  use_frameworks!
+
+  # Pods for MovieMate
+  app_pods
+  
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|
