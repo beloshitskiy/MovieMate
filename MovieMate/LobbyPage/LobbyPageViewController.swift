@@ -9,8 +9,8 @@ import SnapKit
 import UIKit
 
 final class LobbyPageViewController: UIViewController {
-    private let lobbyView = LobbyPageView()
-    private let viewModel: LobbyPageViewModel
+    let lobbyView = LobbyPageView()
+    let viewModel: LobbyPageViewModel
 
     init(with viewModel: LobbyPageViewModel) {
         self.viewModel = viewModel

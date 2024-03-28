@@ -10,8 +10,8 @@ import UIKit
 import Combine
 
 final class GenrePageViewController: UIViewController {
-    private let genreView: GenrePageView
-    private let viewModel: GenrePageViewModel
+    let genreView: GenrePageView
+    let viewModel: GenrePageViewModel
 
     private var cancellable: AnyCancellable?
 

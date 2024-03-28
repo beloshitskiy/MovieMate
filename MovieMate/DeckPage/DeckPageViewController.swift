@@ -11,9 +11,9 @@ import SnapKit
 import UIKit
 
 final class DeckPageViewController: UIViewController {
-    private let deckView = SwipeCardStack()
-    private let dataSource = DeckPageDataSource()
-    private let emptyDeckView = WaitingPageView()
+    let deckView = SwipeCardStack()
+    let dataSource = DeckPageDataSource()
+    let emptyDeckView = WaitingPageView()
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -38,7 +38,7 @@ final class DeckPageViewController: UIViewController {
             }.store(in: &cancellables)
     }
 
-    private func handleStateChanged(_ info: LobbyInfo?) {
+    func handleStateChanged(_ info: LobbyInfo?) {
         guard let info else { return }
 
         switch info.appState {

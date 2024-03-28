@@ -17,21 +17,21 @@ final class MovieCardView: UIView {
         }
     }
 
-    private let undoButton = UIButton()
+    let undoButton = UIButton()
 
-    private let posterBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    private let backgroundPosterView = UIImageView()
-    private let mainPosterView = UIImageView()
+    let posterBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+    let backgroundPosterView = UIImageView()
+    let mainPosterView = UIImageView()
 
-    private let substrateView = UIView()
+    let substrateView = UIView()
 
-    private let titleLabel = UILabel()
-    private let infoLabel = MovieInfoLabel()
-    private let genresLabel = MovieGenresLabel()
+    let titleLabel = UILabel()
+    let infoLabel = MovieInfoLabel()
+    let genresLabel = MovieGenresLabel()
 
-    private let actionsView = MovieActionsView()
+    let actionsView = MovieActionsView()
 
-    private let descriptionButton = UIButton()
+    let descriptionButton = UIButton()
 
     // MARK: - Init
 

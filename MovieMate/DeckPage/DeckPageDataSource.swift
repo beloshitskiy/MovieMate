@@ -14,7 +14,7 @@ final class DeckPageDataSource {
     weak var stack: SwipeCardStack?
 
     @Published
-    private(set) var movies: [Movie] = []
+    var movies: [Movie] = []
 
     init() {
         initialLoad()

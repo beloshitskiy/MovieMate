@@ -11,15 +11,15 @@ import UIKit
 
 final class GenrePageView: UIView {
     let tableView = UITableView()
-    private let titleLabel = UILabel()
-    private let randomGenreButton = UIButton()
-    private let confirmButton = UIButton()
-    private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
+    let titleLabel = UILabel()
+    let randomGenreButton = UIButton()
+    let confirmButton = UIButton()
+    let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
     let spinner = UIActivityIndicatorView(style: .large)
 
     private var cancellables: Set<AnyCancellable> = []
 
-    private let viewModel: GenrePageViewModel
+    let viewModel: GenrePageViewModel
 
     init(viewModel: GenrePageViewModel) {
         self.viewModel = viewModel

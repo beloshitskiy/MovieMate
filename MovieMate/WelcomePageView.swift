@@ -13,10 +13,10 @@ import YYText
 final class WelcomePageView: UIView {
     private var viewModel: WelcomePageViewModel?
 
-    private let createLobbyButton = UIButton()
-    private let joinLobbyButton = UIButton()
-    private let backgroundImage = UIImageView(image: .init(named: "welcome"))
-    private let title = YYLabel()
+    let createLobbyButton = UIButton()
+    let joinLobbyButton = UIButton()
+    let backgroundImage = UIImageView(image: .init(named: "welcome"))
+    let title = YYLabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +34,7 @@ final class WelcomePageView: UIView {
     }
 }
 
-private extension WelcomePageView {
+extension WelcomePageView {
     // MARK: - Setup UI
 
     func setupUI() {
