@@ -13,8 +13,8 @@ final class MovieActionsView: UIView {
     var onLikeTap: (() -> Void)?
     var onDislikeTap: (() -> Void)?
 
-    let dislikeButton = UIButton(configuration: .filled())
-    let likeButton = UIButton(configuration: .filled())
+    private let dislikeButton = UIButton(configuration: .filled())
+    private let likeButton = UIButton(configuration: .filled())
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -15,11 +15,11 @@ final class WaitingPageView: UIView {
         }
     }
 
-    let title = UILabel()
-    let subtitle = UILabel()
-    let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
+    private let title = UILabel()
+    private let subtitle = UILabel()
+    private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
 
-    var cancellable: AnyCancellable?
+    private var cancellable: AnyCancellable?
 
     override init(frame: CGRect) {
         super.init(frame: frame)

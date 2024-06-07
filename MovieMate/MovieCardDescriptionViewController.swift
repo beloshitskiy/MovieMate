@@ -11,9 +11,9 @@ import SnapKit
 final class MovieCardDescriptionViewController: UIViewController {
     var movieDescription: String = ""
 
-    let titleLabel = UILabel()
-    let textView = UITextView()
-    let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+    private let titleLabel = UILabel()
+    private let textView = UITextView()
+    private let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
     override func viewDidLoad() {
         super.viewDidLoad()

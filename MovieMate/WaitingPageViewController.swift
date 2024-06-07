@@ -15,11 +15,11 @@ final class WaitingPageViewController: UIViewController {
         case genresChoosing
     }
 
-    let pageView = WaitingPageView()
+    private let pageView = WaitingPageView()
 
-    let type: WaitingType
+    private let type: WaitingType
 
-    var cancellable: AnyCancellable?
+    private var cancellable: AnyCancellable?
 
     init(type: WaitingType) {
         self.type = type

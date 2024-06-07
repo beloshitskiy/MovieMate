@@ -15,12 +15,12 @@ import UIKit
 final class LobbyPageView: UIView {
     private var viewModel: LobbyPageViewModel?
 
-    let headerLabel = UILabel()
-    lazy var roomIDLabel = UILabel()
-    lazy var textField = UITextField()
-    let continueButton = UIButton()
-    lazy var cancelRoomCreationButton = UIButton()
-    let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
+    private let headerLabel = UILabel()
+    private lazy var roomIDLabel = UILabel()
+    private lazy var textField = UITextField()
+    private let continueButton = UIButton()
+    private lazy var cancelRoomCreationButton = UIButton()
+    private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
 
     @Published
     private var probablyRoomID = ""
@@ -33,7 +33,7 @@ final class LobbyPageView: UIView {
     }
 }
 
-extension LobbyPageView {
+private extension LobbyPageView {
     // MARK: - Setup UI
 
     func setupLobby() {

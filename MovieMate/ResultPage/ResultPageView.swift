@@ -12,14 +12,14 @@ import UIKit
 final class ResultPageView: UIView {
     private var viewModel: ResultPageViewModel?
 
-    let title = UILabel()
-    let subtitle = UILabel()
+    private let title = UILabel()
+    private let subtitle = UILabel()
 
-    let leaveSessionButton = UIButton()
-    let restartButton = UIButton()
-    let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
+    private let leaveSessionButton = UIButton()
+    private let restartButton = UIButton()
+    private let backgroundImage = UIImageView(image: .init(named: "welcome_blurred_total"))
 
-    lazy var moviePoster = UIImageView()
+    private lazy var moviePoster = UIImageView()
 
     func configure(with viewModel: ResultPageViewModel) {
         guard self.viewModel == nil else { return }

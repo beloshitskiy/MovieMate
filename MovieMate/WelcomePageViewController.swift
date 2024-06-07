@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 
 final class WelcomePageViewController: UIViewController {
-    let welcomeView = WelcomePageView()
-    let welcomeVM = WelcomePageViewModel()
+    private let welcomeView = WelcomePageView()
+    private let welcomeVM = WelcomePageViewModel()
 
     init() {
         super.init(nibName: nil, bundle: nil)
