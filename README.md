@@ -1,7 +1,4 @@
 # MovieMate: Watch Together
-
-![MovieMate Logo](MovieMate/Assets.xcassets/AppIcon.appiconset/Icon-1024.png)
-
 ## Описание
 
 **MovieMate: Watch Together** — приложение позволяющее легко и удобно выбрать кино для совместного досуга.
@@ -19,16 +16,16 @@
 ## Скриншоты
 
 ### Главный экран
-![Главный экран](resources/welcome_page.png)
+<img src="resources/welcome_page.png" width="350"/>
 
 ### Выбор жанра
-![Выбор жанра](resources/choose_genre_page.png)
+<img src="resources/choose_genre_page.png" width="350"/>
 
 ### Выбор фильма
-![Выбор фильма](resources/choose_movie_page.png)
+<img src="resources/choose_movie_page.png" width="350"/>
 
 ### Итоговый результат
-![Итоговый результат](resources/result_page.png)
+<img src="resources/result_page.png" width="350"/>
 
 
 ## Технологии и инструменты
